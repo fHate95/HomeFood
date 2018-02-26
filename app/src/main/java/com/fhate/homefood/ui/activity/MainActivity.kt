@@ -18,7 +18,9 @@ import com.fhate.homefood.graphics.BadgeDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import com.fhate.homefood.ui.fragment.MainFragment
+import com.fhate.homefood.ui.fragment.MenuFragment
 import com.fhate.homefood.util.Repository
 import com.fhate.homefood.util.Tools
 import com.google.firebase.database.DataSnapshot
@@ -36,6 +38,9 @@ class MainActivity : AppCompatActivity() {
     private val repo: Repository
             by lazy(LazyThreadSafetyMode.NONE) { Repository(this@MainActivity) }
 
+    val mainFragment = MainFragment()
+    val menuFragment = MenuFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,9 +50,25 @@ class MainActivity : AppCompatActivity() {
         toolbar.title = resources.getString(R.string.app_name)
 
         supportFragmentManager.beginTransaction()
-                .add(R.id.content_frame, MainFragment())
+                .add(R.id.content_frame, mainFragment)
                 .commit()
     }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        if (menuFragment.isVisible) {
+            toolbar.title = ""
+            supportFragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .setCustomAnimations(R.anim.left_in, R.anim.right_out)
+                    .replace(R.id.content_frame, mainFragment)
+                    .commit()
+        }
+        else {
+            finish()
+        }
+    }
+
     /* Создание toolbar меню */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_toolbar, menu)

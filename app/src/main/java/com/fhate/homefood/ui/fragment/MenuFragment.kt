@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_menu.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -44,7 +45,7 @@ class MenuFragment: Fragment() {
         val bundle = this.arguments
         if (bundle != null) {
             menuTag = bundle.getString(repo.TAG_MENU)
-            activity.toolbar.title = menuTag
+            //activity.toolbar.title = menuTag
         }
 
         return view
@@ -52,6 +53,7 @@ class MenuFragment: Fragment() {
 
     /* View создан */
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        menuList = ArrayList()
         menuList.add(MenuItem("Item 1", 0))
         menuList.add(MenuItem("Item 2", 0))
         menuList.add(MenuItem("Item 3", 0))
@@ -77,12 +79,14 @@ class MenuFragment: Fragment() {
                 }
             })
         }
+        activity.toolbar.title = menuTag
     }
 
     /* Формируем список меню:
         * Получаем ссылку на узел с ключем menuTag
          * Собираем ключи и значение всех узлов под menuTag и формируем из них список */
     private fun loadDataList() {
+        activity.pBar.visibility = View.VISIBLE
         val foodRef = FirebaseDatabase.getInstance().reference.child(repo.TAG_FOOD).child(menuTag)
         foodRef.addListenerForSingleValueEvent(
                 object : ValueEventListener {
@@ -96,15 +100,17 @@ class MenuFragment: Fragment() {
                                 val item = MenuItem(entry.key, singleEntry["price"] as Long)
                                 menuList.add(item)
                             }
-
                             setRecyclerView()
+                            activity.pBar.visibility = View.INVISIBLE
                         } catch (e: TypeCastException) {
                             tools.makeToast("Error")
+                            activity.pBar.visibility = View.INVISIBLE
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
-
+                        tools.makeToast("Error")
+                        activity.pBar.visibility = View.INVISIBLE
                     }
                 })
     }
