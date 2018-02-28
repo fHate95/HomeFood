@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import com.fhate.homefood.R
 import kotlinx.android.synthetic.main.rv_food_types_item.view.*
 
-internal class MainAdapterRV(val items: ArrayList<String>, listener: AdapterClickListener): RecyclerView.Adapter<MainAdapterRV.ViewHolder>() {
+internal class MainAdapterRV(private val items: ArrayList<String>, listener: AdapterClickListener):
+        RecyclerView.Adapter<MainAdapterRV.ViewHolder>() {
 
     val onClickListener: AdapterClickListener = listener
 

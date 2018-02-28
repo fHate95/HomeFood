@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/background_light"
-    tools:context="com.fhate.homefood.ui.activity.MainActivity">
+    android:background="@color/colorBlack"
+    tools:context="com.fhate.homefood.ui.activity.TestActivity">
 
     <include
         layout="@layout/toolbar"
@@ -19,11 +19,21 @@
         android:layout_height="4dp"
         android:background="@drawable/toolbar_dropshadow"/>
 
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:text="It's work!"
+        android:textSize="24sp"
+        android:textColor="@color/colorWhite"
+        android:gravity="center"
+        android:layout_marginTop="20dp"/>
 
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/ivClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ico_cart"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

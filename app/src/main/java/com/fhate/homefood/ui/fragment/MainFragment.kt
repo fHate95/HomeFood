@@ -19,10 +19,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 
-
+/* Фрагмент со список доступных для выбора меню */
 class MainFragment: Fragment() {
 
     private val tools: Tools
@@ -41,7 +41,8 @@ class MainFragment: Fragment() {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         (activity as AppCompatActivity).setSupportActionBar(activity.toolbar)
-        //activity.toolbar.title = resources.getString(R.string.app_name)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(false)
 
         return view
     }
@@ -49,9 +50,7 @@ class MainFragment: Fragment() {
     /* View создан */
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         list = ArrayList()
-        list.add("Item 1")
-        list.add("Item 2")
-        list.add("Item 3")
+        list.add("Some kind of food")
 
         //loadDataList()
         setRecyclerView()
@@ -66,10 +65,9 @@ class MainFragment: Fragment() {
 
                 /* Обработчик клика по элементу списка */
                 override fun onItemClick(position: Int) {
-                    activity.toolbar.title = ""
                     val bundle = Bundle()
                     bundle.putString(repo.TAG_MENU, list[position])
-                    //val fragment = MenuFragment()
+                    repo.lastMenuTag = list[position]
                     (activity as MainActivity).menuFragment.arguments = bundle
                     activity.supportFragmentManager.beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -78,7 +76,9 @@ class MainFragment: Fragment() {
                             .commit()
                 }
             })
-            activity.toolbar.title = resources.getString(R.string.app_name)
+            /* title */
+            activity.toolbar.tvTitle.text = resources.getString(R.string.app_name)
+            tools.showToolbarTitle(activity.toolbar.tvTitle)
         }
     }
 
@@ -95,16 +95,16 @@ class MainFragment: Fragment() {
                             val map = dataSnapshot.value as Map<String, Any>
                             list = ArrayList<String>(map.keys)
                             setRecyclerView()
-                            activity.pBar.visibility = View.INVISIBLE
+                            pBar.visibility = View.INVISIBLE
                         } catch (e: TypeCastException) {
                             tools.makeToast("Error")
-                            activity.pBar.visibility = View.INVISIBLE
+                            pBar.visibility = View.INVISIBLE
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
                         tools.makeToast("Error")
-                        activity.pBar.visibility = View.INVISIBLE
+                        pBar.visibility = View.INVISIBLE
                     }
                 })
     }

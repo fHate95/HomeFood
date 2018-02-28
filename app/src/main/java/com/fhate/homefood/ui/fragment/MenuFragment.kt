@@ -2,6 +2,7 @@ package com.fhate.homefood.ui.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -18,10 +19,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_menu.*
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 
+/* Фрагмент со список блюд выбранного меню */
 class MenuFragment: Fragment() {
 
     private val tools: Tools
@@ -41,11 +43,12 @@ class MenuFragment: Fragment() {
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
 
         (activity as AppCompatActivity).setSupportActionBar(activity.toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
 
         val bundle = this.arguments
         if (bundle != null) {
             menuTag = bundle.getString(repo.TAG_MENU)
-            //activity.toolbar.title = menuTag
         }
 
         return view
@@ -54,9 +57,9 @@ class MenuFragment: Fragment() {
     /* View создан */
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         menuList = ArrayList()
-        menuList.add(MenuItem("Item 1", 0))
-        menuList.add(MenuItem("Item 2", 0))
-        menuList.add(MenuItem("Item 3", 0))
+        menuList.add(MenuItem("Печеньки", 60, false))
+        menuList.add(MenuItem("Супчик", 120, true))
+        menuList.add(MenuItem("Пельмешки", 80, false))
 
         //loadDataList()
         setRecyclerView()
@@ -68,18 +71,27 @@ class MenuFragment: Fragment() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
             adapter = MenuAdapterRV(activity, menuList, object : MenuAdapterRV.AdapterClickListener {
-//                override fun onButtonClick(position: Int) {
-//                    Toast.makeText(this@MenuActivity, "Click on button in " + list[position], Toast.LENGTH_SHORT).show()
-//                }
+                override fun onButtonAddClick(position: Int) {
+                    tools.addToCart(menuList[position])
+                    tools.setCartBadgeCount((activity as MainActivity).icon, tools.getCartCount().toString())
+                    tools.makeToast("Item added to cart")
+                }
 
-                override fun onItemClick(position: Int) {
-                    //tools.makeToast("Click on item at position " + position)
-                    //repo.cartCount++
-                    //tools.setCartBadgeCount((activity as MainActivity).icon, repo.cartCount.toString())
+                override fun onButtonOverviewClick(position: Int) {
+                    val bundle = Bundle()
+                    bundle.putString(repo.TAG_DISH, menuList[position].name)
+                    (activity as MainActivity).overviewFragment.arguments = bundle
+                    activity.supportFragmentManager.beginTransaction()
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .setCustomAnimations(R.anim.right_in, R.anim.left_out)
+                            .replace(R.id.content_frame, (activity as MainActivity).overviewFragment)
+                            .commit()
                 }
             })
         }
-        activity.toolbar.title = menuTag
+        /* title */
+        activity.toolbar.tvTitle.text = menuTag
+        tools.showToolbarTitle(activity.toolbar.tvTitle)
     }
 
     /* Формируем список меню:
@@ -97,20 +109,20 @@ class MenuFragment: Fragment() {
                             for (entry in map.entries) {
                                 //get map
                                 val singleEntry = entry.value as Map<String, Any>
-                                val item = MenuItem(entry.key, singleEntry["price"] as Long)
+                                val item = MenuItem(entry.key, singleEntry["price"] as Long, false)
                                 menuList.add(item)
                             }
                             setRecyclerView()
-                            activity.pBar.visibility = View.INVISIBLE
+                            pBar.visibility = View.INVISIBLE
                         } catch (e: TypeCastException) {
                             tools.makeToast("Error")
-                            activity.pBar.visibility = View.INVISIBLE
+                            pBar.visibility = View.INVISIBLE
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
                         tools.makeToast("Error")
-                        activity.pBar.visibility = View.INVISIBLE
+                        pBar.visibility = View.INVISIBLE
                     }
                 })
     }

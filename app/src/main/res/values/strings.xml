@@ -2,5 +2,5 @@
     <string name="app_name">HomeFood</string>
 
     <string name="ruble_sign">₽</string>
-    <string name="action_cart">Корзина</string>
+    <string name="cart">Корзина</string>
 </resources>

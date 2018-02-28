@@ -7,7 +7,7 @@
     <item
         android:id="@+id/action_cart"
         android:orderInCategory="1"
-        android:title="@string/action_cart"
+        android:title="@string/cart"
         android:icon="@drawable/ico_menu_cart"
         app:showAsAction="always"/>
 </menu>
