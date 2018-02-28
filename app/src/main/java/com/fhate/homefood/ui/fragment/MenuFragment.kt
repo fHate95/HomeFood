@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
 
 /* Фрагмент со список блюд выбранного меню */
+/* TODO: Fix cart badger on this fragment */
 class MenuFragment: Fragment() {
 
     private val tools: Tools
