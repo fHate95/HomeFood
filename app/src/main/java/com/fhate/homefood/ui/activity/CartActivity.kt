@@ -33,9 +33,22 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.graphics.BitmapFactory
+import android.os.Handler
+import android.support.annotation.Dimension
+import android.support.v4.content.ContextCompat
+import android.transition.TransitionManager
+import android.widget.Toast
+import com.creativityapps.gmailbackgroundlibrary.BackgroundMail
 
 
 class CartActivity: AppCompatActivity() {
+
+    private var MAIL_USERNAME = "homefood.kirov@gmail.com"
+    private var MAIL_PASSWORD = "6t24paaYq"
+    private var MAIL_TO = "f.hate95@yandex.ru"
+    private var MAIL_SUBJECT = "Заказ №28"
+    private var MAIL_BODY = ""
 
     private var revealX = 0
     private var revealY = 0
@@ -66,18 +79,37 @@ class CartActivity: AppCompatActivity() {
 //        cartList.add(CartItem("Item 3"))
 
         cartList = repo.getCartList()
+        updateInfo()
 
         if (cartList.isNotEmpty())
             setRecyclerView()
         else {
             tvEmptyCart.visibility = View.VISIBLE
-            shadow_view.visibility = View.INVISIBLE
+        }
+
+        buttonGoToOrder.setOnClickListener {
+            val intent = Intent(this, OrderActivity::class.java)
+            overridePendingTransition(R.anim.left_out, R.anim.right_in)
+            startActivity(intent)
         }
     }
 
     override fun onBackPressed() {
         //super.onBackPressed()
         hideActivity()
+    }
+
+    private fun updateInfo() {
+        when (tools.getCartCount() % 10) {
+            1 -> tvCount.text = resources.getString(R.string.total) + " " + tools.getCartCount().toString() + " " +
+                    resources.getString(R.string.info_dish_count_1)
+            2,3,4 -> tvCount.text = resources.getString(R.string.total) + " " + tools.getCartCount().toString() + " " +
+                    resources.getString(R.string.info_dish_count_2_4)
+            else -> tvCount.text = resources.getString(R.string.total) + " " + tools.getCartCount().toString() + " " +
+                    resources.getString(R.string.info_dish_count_5_0)
+        }
+        tvPrice.text = tools.getCartPrice().toString() + resources.getString(R.string.ruble_sign)
+
     }
 
     private fun setRecyclerView() {
@@ -88,6 +120,7 @@ class CartActivity: AppCompatActivity() {
                     cartList[position].count++
                     repo.setCartList(cartList)
                     recyclerView.adapter.notifyDataSetChanged()
+                    updateInfo()
                 }
 
                 override fun onButtonDecreaseClick(position: Int) {
@@ -96,11 +129,12 @@ class CartActivity: AppCompatActivity() {
                         cartList.removeAt(position)
                     }
                     if (cartList.isEmpty()) {
-                        setEmptyCart()
+                        tvEmptyCart.visibility = View.VISIBLE
                     }
 
                     repo.setCartList(cartList)
                     recyclerView.adapter.notifyDataSetChanged()
+                    updateInfo()
                 }
 
             })
@@ -138,11 +172,6 @@ class CartActivity: AppCompatActivity() {
         } else {
             rootLayout.visibility = View.VISIBLE
         }
-    }
-
-    private fun setEmptyCart() {
-        tvEmptyCart.visibility = View.VISIBLE
-        shadow_view.visibility = View.INVISIBLE
     }
 
     private fun showActivity(x: Int, y: Int) {

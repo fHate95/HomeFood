@@ -8,12 +8,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Overview"
-            android:textColor="@color/colorPrimaryText"
-            android:gravity="center"/>
+            android:layout_height="200dp"
+            android:src="@drawable/photo_soup" />
 
     </LinearLayout>
 

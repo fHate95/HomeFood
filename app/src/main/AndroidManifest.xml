@@ -20,6 +20,8 @@
 
         <activity android:name=".ui.activity.CartActivity"
             android:theme="@style/AppTheme.Transparent"/>
+
+        <activity android:name=".ui.activity.OrderActivity"/>
     </application>
 
 </manifest>

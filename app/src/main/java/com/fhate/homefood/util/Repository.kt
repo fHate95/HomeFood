@@ -21,8 +21,20 @@ class Repository(private val context: Context) {
     val TAG_USERS = "users"
     val TAG_MENU = "menu"
     val TAG_DISH = "dish"
+    val TAG_NAME = "name"
+    val TAG_VALUES = "values"
+    val TAG_ORDER_NUMBER = "order_number"
+    val TAG_ADDRESS = "address"
+    val TAG_ORDER_COUNT = "order_count"
+    val TAG_TOTAL_PRICE = "total_price"
+    val TAG_MAIL_TO = "mail_to"
+    val TAG_MAIL_USERNAME = "mail_username"
+    val TAG_MAIL_PASSWORD = "mail_password"
+
     val EXTRA_CIRCULAR_REVEAL_X = "EXTRA_CIRCULAR_REVEAL_X"
     val EXTRA_CIRCULAR_REVEAL_Y = "EXTRA_CIRCULAR_REVEAL_Y"
+    val TAG_AUTOCOMPLETE_NAME = "autocomplete_name"
+    val TAG_AUTOCOMPLETE_ADDRESS = "autocomplete_address"
 
     private val prefs = context.getSharedPreferences(PREFS_FILENAME, 0)
 
@@ -61,6 +73,36 @@ class Repository(private val context: Context) {
                 return list
             else {
                 val type = object : TypeToken<ArrayList<CartItem>>() {
+
+                }.type
+                list = Gson().fromJson(json, type)
+            }
+            return list
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+        }
+
+        return list
+    }
+
+    fun setAutoCompleteList(list: ArrayList<String>, tag: String) {
+        val editor = prefs.edit()
+        val json = Gson().toJson(list)
+
+        editor.putString(tag, json)
+        editor.commit()
+    }
+
+    fun getAutoCompleteList(tag: String) : ArrayList<String> {
+        var list = ArrayList<String>()
+        try {
+
+            val json = prefs.getString(tag, null)
+
+            if (json!!.isEmpty())
+                return list
+            else {
+                val type = object : TypeToken<ArrayList<String>>() {
 
                 }.type
                 list = Gson().fromJson(json, type)

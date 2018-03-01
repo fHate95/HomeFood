@@ -9,6 +9,14 @@
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
+    <style name="ButtonTheme" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:background">@drawable/ico_test_pizza</item>
+        <item name="android:layout_width">80.0px</item>
+        <item name="android:layout_height">40.0px</item>
+        <item name="colorControlHighlight">@color/colorTransparent</item>
+    </style>
+
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>

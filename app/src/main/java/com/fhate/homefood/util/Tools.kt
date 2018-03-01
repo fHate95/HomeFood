@@ -5,6 +5,7 @@ import android.graphics.drawable.LayerDrawable
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.fhate.homefood.R
@@ -52,6 +53,11 @@ class Tools(val context: Context) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
+    fun hideKeyBoard(v: View, cont: Context) {
+        val imm = cont.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(v.windowToken, 0)
+    }
+
     fun hideToolbarTitle(toolbar: TextView) {
         toolbar.startAnimation(leftOutAnim)
         toolbar.visibility = View.INVISIBLE
@@ -71,6 +77,17 @@ class Tools(val context: Context) {
         }
 
         return count
+    }
+
+    fun getCartPrice() : Long {
+        var cartList = repo.getCartList()
+        var price: Long = 0
+
+        for (i in 0 until cartList.size) {
+            price += cartList[i].price * cartList[i].count
+        }
+
+        return price
     }
 
     fun addToCart(item: MenuItem) {

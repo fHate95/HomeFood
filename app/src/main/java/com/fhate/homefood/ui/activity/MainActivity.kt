@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         icon = menu.findItem(R.id.action_cart).icon as LayerDrawable
-        tools.setCartBadgeCount(icon, repo.getCartList().size.toString())
+        tools.setCartBadgeCount(icon, tools.getCartCount().toString())
         return true
     }
 

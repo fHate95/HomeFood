@@ -8,8 +8,12 @@
     <color name="colorStatusBar">#B0B42C</color>
     <color name="colorDivider">#BDBDBD</color>
 
+    <color name="colorSuccess">#27A844</color>
+    <color name="colorError">#DC3546</color>
+
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransparent">@android:color/transparent</color>
 
     <color name="colorBackgroundLight">@android:color/background_light</color>
 </resources>

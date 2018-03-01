@@ -3,4 +3,18 @@
 
     <string name="ruble_sign">₽</string>
     <string name="cart">Корзина</string>
+
+    <string name="total">Итого</string>
+    <string name="to_pay">К оплате</string>
+    <string name="name">Имя</string>
+    <string name="address">Адрес</string>
+    <string name="number">Номер телефона</string>
+    <string name="order">Заказ</string>
+    <string name="count">шт</string>
+
+    <string name="error">Произошла ошибка. Попробуйте повторить позднее.</string>
+    
+    <string name="info_dish_count_1">товар на сумму</string>
+    <string name="info_dish_count_2_4">товара на сумму</string>
+    <string name="info_dish_count_5_0">товаров на сумму</string>
 </resources>

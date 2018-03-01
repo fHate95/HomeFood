@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/et_name"
+            android:drawableLeft="@drawable/ic_user"
+            android:drawableTint="@color/colorAccent"
+            android:drawablePadding="15dp"
+            android:hint="Имя"
+            android:inputType="textCapWords"
+            android:padding="16dp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/et_name"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawableTint="@color/colorAccent"
+            android:drawablePadding="15dp"
+            android:hint="Адрес"
+            android:padding="16dp" />
+
+        <br.com.sapereaude.maskedEditText.MaskedEditText
+            android:id="@+id/etNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:inputType="phone"
+            android:typeface="monospace"
+            mask:allowed_chars="1234567890"
+            mask:mask="+7(###)###-##-##"
+            android:hint="**********"
+            app:keep_hint="true"
+            android:background="@drawable/et_name"
+            android:drawableLeft="@drawable/ic_phone"
+            android:drawableTint="@color/colorAccent"
+            android:drawablePadding="15dp"
+            android:padding="16dp"/>
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/buttonOrder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:text="Заказать"
+            android:background="@color/colorPrimary"
+            app:spinning_bar_color="@color/colorAccent"
+            app:spinning_bar_padding="3dp" />
+
+    </LinearLayout>
+</ScrollView>
