@@ -74,15 +74,14 @@ class CartActivity: AppCompatActivity() {
 
         animateActivity(savedInstanceState)
 
-//        cartList.add(CartItem("Item 1"))
-//        cartList.add(CartItem("Item 2"))
-//        cartList.add(CartItem("Item 3"))
-
         cartList = repo.getCartList()
         updateInfo()
 
-        if (cartList.isNotEmpty())
+        if (cartList.isNotEmpty()) {
             setRecyclerView()
+            llInfoView.visibility = View.VISIBLE
+            buttonGoToOrder.visibility = View.VISIBLE
+        }
         else {
             tvEmptyCart.visibility = View.VISIBLE
         }
@@ -127,13 +126,33 @@ class CartActivity: AppCompatActivity() {
                     cartList[position].count--
                     if (cartList[position].count < 1) {
                         cartList.removeAt(position)
+                        recyclerView.adapter.notifyItemRemoved(position)
+                    }
+                    else {
+                        recyclerView.adapter.notifyDataSetChanged()
                     }
                     if (cartList.isEmpty()) {
                         tvEmptyCart.visibility = View.VISIBLE
+                        buttonGoToOrder.visibility = View.INVISIBLE
+                        llInfoView.visibility = View.INVISIBLE
                     }
 
                     repo.setCartList(cartList)
-                    recyclerView.adapter.notifyDataSetChanged()
+                    updateInfo()
+                }
+
+                override fun onButtonDeleteClick(position: Int) {
+                    cartList.removeAt(position)
+                    recyclerView.adapter.notifyItemRemoved(position)
+
+                    if (cartList.isEmpty()) {
+                        tvEmptyCart.visibility = View.VISIBLE
+                        buttonGoToOrder.visibility = View.INVISIBLE
+                        llInfoView.visibility = View.INVISIBLE
+                    }
+
+                    repo.setCartList(cartList)
+                    //recyclerView.adapter.notifyDataSetChanged()
                     updateInfo()
                 }
 

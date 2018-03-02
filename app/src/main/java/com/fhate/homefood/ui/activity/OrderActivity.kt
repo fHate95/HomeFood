@@ -71,51 +71,66 @@ class OrderActivity : AppCompatActivity() {
         }
 
         buttonOrder.setOnClickListener { v ->
-            //if all nice
-            user = User(etName.text.toString(), etAddress.text.toString(), etNumber.text.toString(), 1, tools.getCartPrice())
+            if (isFildsFilled()) {
+                user = User(etName.text.toString(), etAddress.text.toString(), etNumber.text.toString(), 1, tools.getCartPrice())
 
-            userReference.child(user.number).child(repo.TAG_ORDER_COUNT).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    try {
-                        val value = dataSnapshot.getValue(Long::class.java).toString()
-                        user.orderCount = value.toLong() + 1
-                    } catch (E: NullPointerException) {
+                userReference.child(user.number).child(repo.TAG_ORDER_COUNT).addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        try {
+                            val value = dataSnapshot.getValue(Long::class.java).toString()
+                            user.orderCount = value.toLong() + 1
+                        } catch (E: NullPointerException) {
 
+                        }
                     }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.w("db", "Failed to read value.", error.toException())
-                }
-            })
-
-            userReference.child(user.number).child(repo.TAG_TOTAL_PRICE).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    try {
-                    val value = dataSnapshot.getValue(Long::class.java).toString()
-                    user.totalPrice = value.toLong() + user.totalPrice
-                    } catch (E: NullPointerException) {
-
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w("db", "Failed to read value.", error.toException())
                     }
-                }
+                })
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.w("db", "Failed to read value.", error.toException())
-                }
-            })
+                userReference.child(user.number).child(repo.TAG_TOTAL_PRICE).addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        try {
+                            val value = dataSnapshot.getValue(Long::class.java).toString()
+                            user.totalPrice = value.toLong() + user.totalPrice
+                        } catch (E: NullPointerException) {
 
-            tools.hideKeyBoard(v, this@OrderActivity)
-            buttonOrder.startAnimation()
-            setMailBody()
-            sendEmail()
-            saveAutoCompleteNameList(etName.text.toString())
-            saveAutoCompleteAddressList(etAddress.text.toString())
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w("db", "Failed to read value.", error.toException())
+                    }
+                })
+
+                tools.hideKeyBoard(v, this@OrderActivity)
+                buttonOrder.startAnimation()
+                setMailBody()
+                sendEmail()
+                saveAutoCompleteNameList(etName.text.toString())
+                saveAutoCompleteAddressList(etAddress.text.toString())
+            }
+            else {
+                tools.makeToast(resources.getString(R.string.error_fields))
+            }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         buttonOrder.dispose()
+    }
+
+    private fun isFildsFilled() : Boolean {
+        var res = true
+        when {
+            etName.text.isEmpty() -> res = false
+            etAddress.text.isEmpty() -> res = false
+            etNumber.text[etNumber.text.length - 1] == '*' -> res = false
+        }
+
+        return res
     }
 
     private fun setMailBody() {

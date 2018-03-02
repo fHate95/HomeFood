@@ -49,6 +49,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
+            android:maxLines="4"
             android:inputType="phone"
             android:typeface="monospace"
             mask:allowed_chars="1234567890"

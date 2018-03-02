@@ -3,15 +3,26 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="80dp">
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6"
-        android:text="Test RecyclerView Item"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:paddingLeft="5dp"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Test RecyclerView Item"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:paddingLeft="5dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/back"
+            android:scaleType="fitStart"/>
+
+    </FrameLayout>
 
 </LinearLayout>

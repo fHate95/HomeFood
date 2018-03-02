@@ -1,86 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="144dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="140dp">
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/swipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        app:mode="same_level"
+        app:dragEdge="right">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivImage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:src="@drawable/photo_soup"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:paddingLeft="2dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:text="Супчик, вроде с рыбкой, а ещё с петрушкой, или что это там такое зелёное"
-                android:textSize="16sp"
-                android:textColor="@color/colorPrimaryText"
-                android:textStyle="bold"
-                android:layout_gravity="start"
-                android:maxLines="3"/>
+        <FrameLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/buttonDecrease"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:text="-" />
+                <ImageView
+                    android:id="@+id/buttonDelete"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:src="@drawable/ico_del"
+                    android:padding="30dp"
+                    android:background="@color/colorError"/>
 
-                <TextView
-                    android:id="@+id/tvCount"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:text="2"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorSecondaryText"
-                    android:gravity="center"/>
-
-                <Button
-                    android:id="@+id/buttonIncrease"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:text="+" />
-
-                <TextView
-                    android:id="@+id/tvPrice"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.7"
-                    android:text="120₽"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorSecondaryText"
-                    android:gravity="center"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="@drawable/shadow_top_to_bot"
+                    android:layout_gravity="bottom"/>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </FrameLayout>
 
-    </LinearLayout>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal" android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivImage"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:src="@drawable/photo_soup"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    android:paddingLeft="2dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Супчик, вроде с рыбкой, а ещё с петрушкой, или что это там такое зелёное"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textStyle="bold"
+                        android:layout_gravity="start"
+                        android:maxLines="3"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/buttonDecrease"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:text="-" />
+
+                        <TextView
+                            android:id="@+id/tvCount"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.3"
+                            android:text="2"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorSecondaryText"
+                            android:gravity="center"/>
+
+                        <Button
+                            android:id="@+id/buttonIncrease"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:text="+" />
+
+                        <TextView
+                            android:id="@+id/tvPrice"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.7"
+                            android:text="120₽"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorSecondaryText"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
 
     <View
         android:layout_width="match_parent"

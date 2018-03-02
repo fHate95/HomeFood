@@ -8,15 +8,25 @@ import android.view.ViewGroup
 import com.fhate.homefood.model.CartItem
 import com.fhate.homefood.R
 import kotlinx.android.synthetic.main.rv_cart_item.view.*
+import com.chauthai.swipereveallayout.ViewBinderHelper
+import com.chauthai.swipereveallayout.SwipeRevealLayout
+
+
+
+
 
 internal class CartAdapterRV(val context: Context, private val items: ArrayList<CartItem>, listener: AdapterClickListener):
         RecyclerView.Adapter<CartAdapterRV.ViewHolder>() {
 
     val onClickListener: AdapterClickListener = listener
 
+    /* SwipeLayout stuff */
+    private val binderHelper = ViewBinderHelper()
+
     interface AdapterClickListener {
         fun onButtonIncreaseClick(position: Int)
         fun onButtonDecreaseClick(position: Int)
+        fun onButtonDeleteClick(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +36,10 @@ internal class CartAdapterRV(val context: Context, private val items: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems(items[position], position)
+        val data = items[position].name
+
+        binderHelper.setOpenOnlyOne(true)
+        binderHelper.bind(holder.swipeLayout, data)
     }
 
     override fun getItemCount(): Int {
@@ -34,13 +48,19 @@ internal class CartAdapterRV(val context: Context, private val items: ArrayList<
 
     internal inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        val swipeLayout: SwipeRevealLayout = itemView.swipeLayout
+
         /* Set click listeners for view items */
         init {
+
             itemView.buttonIncrease.setOnClickListener {
                 onClickListener.onButtonIncreaseClick(adapterPosition)
             }
             itemView.buttonDecrease.setOnClickListener {
                 onClickListener.onButtonDecreaseClick(adapterPosition)
+            }
+            itemView.buttonDelete.setOnClickListener {
+                onClickListener.onButtonDeleteClick(adapterPosition)
             }
         }
 

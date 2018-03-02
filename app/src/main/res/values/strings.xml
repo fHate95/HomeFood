@@ -13,6 +13,7 @@
     <string name="count">шт</string>
 
     <string name="error">Произошла ошибка. Попробуйте повторить позднее.</string>
+    <string name="error_fields">Все поля должны быть заполнены!</string>
     
     <string name="info_dish_count_1">товар на сумму</string>
     <string name="info_dish_count_2_4">товара на сумму</string>
