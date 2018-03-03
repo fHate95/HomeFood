@@ -1,8 +1,19 @@
 <resources>
     <string name="app_name">HomeFood</string>
 
+    <string name="ok">ОК</string>
+    <string name="copy_number">Скопировать номер</string>
+    <string name="copy_number_ok">Номер скопирован</string>
+    <string name="one">1</string>
     <string name="ruble_sign">₽</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+
     <string name="cart">Корзина</string>
+    <string name="next">Далее</string>
+    <string name="cart_empty">Ваша корзина пуста.</string>
+    <string name="cart_add">Добавить в корзину</string>
+    <string name="cart_added">Добавлено в корзину</string>
 
     <string name="total">Итого</string>
     <string name="to_pay">К оплате</string>
@@ -10,10 +21,17 @@
     <string name="address">Адрес</string>
     <string name="number">Номер телефона</string>
     <string name="order">Заказ</string>
+    <string name="order_v">Заказать</string>
+    <string name="order_form">Оформление заказа</string>
     <string name="count">шт</string>
 
+    <string name="order_done_title">Заказ оформлен</string>
+    <string name="order_done_message1">Ожидайте звонка или позвоните по номеру</string>
+    <string name="order_done_message2">самостоятельно</string>
     <string name="error">Произошла ошибка. Попробуйте повторить позднее.</string>
     <string name="error_fields">Все поля должны быть заполнены!</string>
+    <string name="alert_connection_error">Ошибка соединения с сервером</string>
+    <string name="close_app">Приложение будет закрыто</string>
     
     <string name="info_dish_count_1">товар на сумму</string>
     <string name="info_dish_count_2_4">товара на сумму</string>

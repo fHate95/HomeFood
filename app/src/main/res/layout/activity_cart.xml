@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,84 +7,90 @@
     android:layout_height="match_parent"
     android:background="#EEEEEE">
 
-    <LinearLayout
+    <include
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="com.fhate.homefood.ui.activity.CartActivity">
+        android:layout_height="?android:actionBarSize" />
 
-        <include
-            layout="@layout/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/toolbar_dropshadow"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/toolbar_dropshadow"/>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:id="@+id/tvEmptyCart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Ваша корзина пуста."
-                android:textSize="18sp"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/colorSecondaryText"
-                android:layout_centerInParent="true"
-                android:textAlignment="center"
-                android:visibility="invisible"/>
-
-        </FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/llInfoView"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal"
-            android:visibility="invisible">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="com.fhate.homefood.ui.activity.CartActivity">
 
-            <TextView
-                android:id="@+id/tvCount"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6"
-                android:gravity="center_vertical|start"
-                android:layout_marginLeft="20dp"
-                android:textColor="@color/colorPrimaryText"
-                android:text="n товар(ов) на сумму"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.4"
-                android:gravity="center_vertical|end"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/colorPrimaryText"
-                android:text="***₽"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
+                <TextView
+                    android:id="@+id/tvEmptyCart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/cart_empty"
+                    android:textSize="18sp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/colorSecondaryText"
+                    android:layout_centerInParent="true"
+                    android:textAlignment="center"
+                    android:visibility="invisible"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/llInfoView"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+                <TextView
+                    android:id="@+id/tvCount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.6"
+                    android:gravity="center_vertical|start"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/colorPrimaryText"
+                    tools:text="n товар(ов) на сумму"/>
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:gravity="center_vertical|end"
+                    android:layout_marginRight="20dp"
+                    android:textColor="@color/colorPrimaryText"
+                    tools:text="***₽"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGoToOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/colorWhite"
+                android:visibility="invisible"
+                android:text="@string/next"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonGoToOrder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/colorWhite"
-            android:visibility="invisible"
-            android:text="Далее"/>
-    </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+</LinearLayout>

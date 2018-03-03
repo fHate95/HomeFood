@@ -93,6 +93,14 @@ class CartActivity: AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if (repo.orderDone) {
+            this.finish()
+        }
+    }
+
     override fun onBackPressed() {
         //super.onBackPressed()
         hideActivity()
@@ -149,10 +157,12 @@ class CartActivity: AppCompatActivity() {
                         tvEmptyCart.visibility = View.VISIBLE
                         buttonGoToOrder.visibility = View.INVISIBLE
                         llInfoView.visibility = View.INVISIBLE
+                        recyclerView.visibility = View.INVISIBLE
+                        //recyclerView.adapter.notifyDataSetChanged()
                     }
 
                     repo.setCartList(cartList)
-                    //recyclerView.adapter.notifyDataSetChanged()
+                    recyclerView.adapter.notifyDataSetChanged()
                     updateInfo()
                 }
 

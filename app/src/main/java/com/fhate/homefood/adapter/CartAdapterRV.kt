@@ -10,9 +10,7 @@ import com.fhate.homefood.R
 import kotlinx.android.synthetic.main.rv_cart_item.view.*
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.chauthai.swipereveallayout.SwipeRevealLayout
-
-
-
+import com.squareup.picasso.Picasso
 
 
 internal class CartAdapterRV(val context: Context, private val items: ArrayList<CartItem>, listener: AdapterClickListener):
@@ -65,10 +63,16 @@ internal class CartAdapterRV(val context: Context, private val items: ArrayList<
         }
 
         fun bindItems(item: CartItem, position: Int) {
-            //TODO: set image
             itemView.tvName.text = item.name
             itemView.tvCount.text = item.count.toString()
             itemView.tvPrice.text = (item.price * item.count).toString() + context.resources.getString(R.string.ruble_sign)
+
+            Picasso.with(context)
+                    .load(item.imageUrl)
+                    .placeholder(R.drawable.ico_error_loading)
+                    .error(R.drawable.ico_error_loading)
+                    //.resize(200, 150)
+                    .into(itemView.ivImage)
         }
     }
 }

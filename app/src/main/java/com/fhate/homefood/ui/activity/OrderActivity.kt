@@ -19,18 +19,22 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import android.R.array
+import android.content.pm.ActivityInfo
 import android.provider.ContactsContract
 import android.util.Log
+import android.view.MenuItem
 import com.fhate.homefood.model.User
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 import kotlin.collections.ArrayList
 
-
+//TODO: Setup toolbar to OrderActivity
 class OrderActivity : AppCompatActivity() {
 
     private var mailUsername = "homefood.kirov@gmail.com"
     private var mailPassword = ""
-    private var mailTo = "f.hate95@yandex.ru"
+    private var mailTo = ""
     private var mailSubject = ""
     private var mailBody = ""
 
@@ -40,6 +44,7 @@ class OrderActivity : AppCompatActivity() {
     private lateinit var user: User
 
     private var orderNumber: Long = 1
+    private var responseNumber = ""
 
     private val tools: Tools
             by lazy(LazyThreadSafetyMode.NONE) { Tools(this@OrderActivity) }
@@ -54,11 +59,20 @@ class OrderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order)
 
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        toolbar.title = ""
+        toolbar.tvTitle.text = resources.getString(R.string.order_form)
+
         database = FirebaseDatabase.getInstance()
         userReference = database.getReference(repo.TAG_USERS)
         valueReference = database.getReference(repo.TAG_VALUES)
 
         getGMailAccountData()
+        getResponseNumber()
 
         etNumber.addTextChangedListener(PhoneNumberFormattingTextWatcher())
 
@@ -82,6 +96,9 @@ class OrderActivity : AppCompatActivity() {
                         } catch (E: NullPointerException) {
 
                         }
+                        catch (e: TypeCastException) {
+
+                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -97,6 +114,9 @@ class OrderActivity : AppCompatActivity() {
                         } catch (E: NullPointerException) {
 
                         }
+                        catch (e: TypeCastException) {
+
+                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -110,6 +130,7 @@ class OrderActivity : AppCompatActivity() {
                 sendEmail()
                 saveAutoCompleteNameList(etName.text.toString())
                 saveAutoCompleteAddressList(etAddress.text.toString())
+                repo.setCartList(ArrayList<CartItem>())
             }
             else {
                 tools.makeToast(resources.getString(R.string.error_fields))
@@ -160,6 +181,9 @@ class OrderActivity : AppCompatActivity() {
                 } catch (E: NullPointerException) {
 
                 }
+                catch (e: TypeCastException) {
+
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -173,6 +197,9 @@ class OrderActivity : AppCompatActivity() {
                     val value = dataSnapshot.getValue(String::class.java).toString()
                     mailPassword = value
                 } catch (E: NullPointerException) {
+
+                }
+                catch (e: TypeCastException) {
 
                 }
             }
@@ -190,6 +217,9 @@ class OrderActivity : AppCompatActivity() {
                 } catch (E: NullPointerException) {
 
                 }
+                catch (e: TypeCastException) {
+
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -205,6 +235,29 @@ class OrderActivity : AppCompatActivity() {
                 } catch (E: NullPointerException) {
 
                 }
+                catch (e: TypeCastException) {
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("db", "Failed to read value.", error.toException())
+            }
+        })
+    }
+
+    private fun getResponseNumber() {
+        valueReference.child(repo.TAG_RESPONSE_NUMBER).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                try {
+                    val value = dataSnapshot.getValue(String::class.java).toString()
+                    responseNumber = value
+                } catch (E: NullPointerException) {
+
+                }
+                catch (e: TypeCastException) {
+
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -214,6 +267,9 @@ class OrderActivity : AppCompatActivity() {
     }
 
     private fun sendEmail() {
+        while (mailUsername == "" && mailPassword == "" && mailTo == "") {
+
+        }
         BackgroundMail.newBuilder(this)
                 .withUsername(mailUsername)
                 .withPassword(mailPassword)
@@ -229,7 +285,10 @@ class OrderActivity : AppCompatActivity() {
                             BitmapFactory.decodeResource(resources, R.drawable.ico_done))
                     val handler = Handler()
                     handler.postDelayed({
-                        this@OrderActivity.finish()
+                        //this@OrderActivity.finish()
+                        tools.showOrderDoneAlert(resources.getString(R.string.order_done_title),
+                                resources.getString(R.string.order_done_message1) + " " + responseNumber + " " +
+                                        resources.getString(R.string.order_done_message2), null, responseNumber)
                     }, 1000)
                 })
                 .withOnFailCallback(BackgroundMail.OnFailCallback {
@@ -271,5 +330,13 @@ class OrderActivity : AppCompatActivity() {
             autoCompleteAddressList.add(item)
             repo.setAutoCompleteList(autoCompleteAddressList, repo.TAG_AUTOCOMPLETE_ADDRESS)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId === android.R.id.home) {
+            onBackPressed()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

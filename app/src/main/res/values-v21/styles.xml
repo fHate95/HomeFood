@@ -9,6 +9,10 @@
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
+    <style name="TabLayoutTheme" parent="Theme.AppCompat" >
+        <item name="colorControlHighlight">@color/colorTransparent</item>
+    </style>
+
     <style name="ButtonTheme" parent="Theme.AppCompat">
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:background">@drawable/ico_test_pizza</item>
