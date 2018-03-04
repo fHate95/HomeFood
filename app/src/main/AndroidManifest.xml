@@ -19,8 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.CartActivity"
-            android:theme="@style/AppTheme.Transparent"/>
+        <activity android:name=".ui.activity.CartActivity" />
 
         <activity android:name=".ui.activity.OrderActivity"/>
 

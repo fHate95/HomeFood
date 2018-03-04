@@ -12,10 +12,6 @@ import android.support.design.widget.TabLayout
 import com.fhate.homefood.ui.fragment.MenuFragment
 import com.fhate.homefood.util.Repository
 import com.fhate.homefood.util.Tools
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import android.support.v4.app.*
 import android.support.v4.view.ViewPager
 import com.fhate.homefood.model.MenuListItem
@@ -23,6 +19,20 @@ import android.view.*
 import android.view.MenuItem
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import android.support.v4.content.ContextCompat
+import android.graphics.drawable.GradientDrawable.Orientation
+import android.graphics.drawable.GradientDrawable
+import com.fhate.homefood.ui.fragment.MainFragment
+import kotlinx.android.synthetic.main.toolbar.view.*
+import android.graphics.drawable.Drawable
+import com.squareup.picasso.Picasso.LoadedFrom
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.os.Build
+import com.fhate.homefood.model.MainItem
+import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 
 /* Главная активность */
@@ -40,7 +50,13 @@ class MainActivity : AppCompatActivity() {
     private var revealX = 0
     private var revealY = 0
 
-    private var list = ArrayList<String>()
+    private var list = ArrayList<MainItem>()
+
+    val mainFragment = MainFragment()
+    val menuFragment = MenuFragment()
+
+    private lateinit var database: FirebaseDatabase
+    private lateinit var valueReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -52,18 +68,23 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         toolbar.title = ""
 
+        database = FirebaseDatabase.getInstance()
+        valueReference = database.getReference(repo.TAG_VALUES)
+
+        val gradientDrawable = GradientDrawable(
+                Orientation.TL_BR,
+                intArrayOf(ContextCompat.getColor(this, R.color.colorGreenGradient1),
+                        ContextCompat.getColor(this, R.color.colorGreenGradient2)))
+
+        toolbar.background = gradientDrawable
+
         if (tools.isOnline()) {
             loadDataList()
-            //Async().execute()
         }
         else {
             tools.showAlertDialog(resources.getString(R.string.alert_connection_error),
                     resources.getString(R.string.close_app), null)
         }
-
-//        pagerAdapter = FragmentPagerAdapter(supportFragmentManager)
-//        pager.adapter = pagerAdapter
-//        tabs.setupWithViewPager(pager)
     }
 
     override fun onResume() {
@@ -73,120 +94,25 @@ class MainActivity : AppCompatActivity() {
         } catch (e: RuntimeException) {
 
         }
+
+        if (menuFragment.isVisible) {
+            menuFragment.setRecyclerView()
+        }
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
-    private inner class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-
-        override fun getItem(position: Int): Fragment {
-            return MenuFragment().newInstance(list[position])
+        //super.onBackPressed()
+        when {
+            menuFragment.isVisible -> {
+                tools.hideToolbarTitle(toolbar.tvTitle)
+                supportFragmentManager.beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .setCustomAnimations(R.anim.left_in, R.anim.right_out)
+                        .replace(R.id.content_frame, mainFragment)
+                        .commit()
+            }
+            else -> finish()
         }
-
-        override fun getItemPosition(`object`: Any?): Int {
-            pager.adapter.notifyDataSetChanged()
-            return super.getItemPosition(`object`)
-        }
-
-        override fun getCount(): Int {
-            return list.size
-        }
-    }
-
-    private fun loadDataList() {
-        pBar.visibility = View.VISIBLE
-        val foodRef = FirebaseDatabase.getInstance().reference.child(repo.TAG_FOOD)
-        foodRef.addListenerForSingleValueEvent(
-                object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        try {
-                            val map = dataSnapshot.value as Map<String, Any>
-                            list = ArrayList<String>(map.keys)
-
-                            if (list.size > 4) {
-                                tabs.tabMode = TabLayout.MODE_SCROLLABLE
-                            } else {
-                                tabs.tabMode = TabLayout.MODE_FIXED
-                            }
-
-                            for (i in 0 until list.size) {
-                                loadMenuDataList(list[i])
-                            }
-
-                            //pBar.visibility = View.INVISIBLE
-                            pagerAdapter = FragmentPagerAdapter(supportFragmentManager)
-                            pager.adapter = pagerAdapter
-                            tabs.setupWithViewPager(pager)
-                            pager.currentItem = list.size - 1
-
-                            for (i in 0 until tabs.tabCount) {
-                                tabs.getTabAt(i)!!.text = list[i]
-                            }
-
-                            //pBar.visibility = View.INVISIBLE
-                            //ContentView.visibility = View.VISIBLE
-
-                        } catch (e: TypeCastException) {
-                            tools.makeToast("Error")
-                            pBar.visibility = View.INVISIBLE
-                        }
-                        catch (E: NullPointerException) {
-                            tools.makeToast("Error")
-                            pBar.visibility = View.INVISIBLE
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        tools.makeToast("Error")
-                        pBar.visibility = View.INVISIBLE
-                    }
-                })
-    }
-
-    /* Формируем список меню:
-    * Получаем ссылку на узел с ключем menuTag
-     * Собираем ключи и значение всех узлов под menuTag и формируем из них список */
-    private fun loadMenuDataList(tag: String) {
-        var menuList = ArrayList<MenuListItem>()
-
-        val foodRef = FirebaseDatabase.getInstance().reference.child(repo.TAG_FOOD).child(tag)
-        foodRef.addListenerForSingleValueEvent(
-                object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        try {
-                            val map = dataSnapshot.value as Map<String, Any>
-
-                            for (entry in map.entries) {
-                                val singleEntry = entry.value as Map<String, Any>
-                                val item = MenuListItem(entry.key, singleEntry["price"] as Long,
-                                        singleEntry["description"] as String, singleEntry["image"] as String)
-                                menuList.add(item)
-                            }
-
-                            repo.setMenuList(menuList, tag)
-
-                            /* Some trick to fix  */
-                            for (i in 0 until list.size) {
-                                pager.currentItem = i
-                            }
-                            pager.currentItem = 0
-                            pBar.visibility = View.INVISIBLE
-                            ContentView.visibility = View.VISIBLE
-                        } catch (e: TypeCastException) {
-                            tools.makeToast("Error")
-                        }
-                        catch (E: NullPointerException) {
-                            tools.makeToast("Error")
-                            pBar.visibility = View.INVISIBLE
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        tools.makeToast("Error")
-                    }
-                })
     }
 
     /* Создание toolbar меню */
@@ -203,42 +129,97 @@ class MainActivity : AppCompatActivity() {
 
         return when (id) {
             R.id.action_cart -> {
-                presentCartActivity(rootLayout)
+                //presentCartActivity(rootLayout)
+                val intent = Intent(this, CartActivity::class.java)
+                //overridePendingTransition(R.anim.right_out, R.anim.left_in)
+                startActivity(intent)
+                true
+            }
+            android.R.id.home -> {
+                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    /* Создадим намеренность анимиованного открытия активности-корзины */
-    private fun presentCartActivity(view: FrameLayout) {
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "transition")
-        val revealX = (view.x + view.width).toInt()
-        val revealY = (0).toInt()
+    /* STORAGE STUFF */
 
-        val intent = Intent(this, CartActivity::class.java)
-        intent.putExtra(repo.EXTRA_CIRCULAR_REVEAL_X, revealX)
-        intent.putExtra(repo.EXTRA_CIRCULAR_REVEAL_Y, revealY)
+    /* Загрузим все элементы меню */
+    private fun loadDataList() {
+//        activity.pBar.visibility = View.VISIBLE
+        val foodRef = FirebaseDatabase.getInstance().reference.child(repo.TAG_FOOD)
+        foodRef.addListenerForSingleValueEvent(
+                object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        try {
+                            val map = dataSnapshot.value as Map<String, Any>
+                            var item = ArrayList<String>(map.keys)
 
-        ActivityCompat.startActivity(this, intent, options.toBundle())
+                            for (i in 0 until item.size) {
+                                list.add(MainItem(item[i], ""))
+                            }
+
+                            list = tools.sortMainList(list)
+                            repo.setTypeList(list)
+
+                            for (i in 0 until list.size) {
+                                loadMenuDataList(i)
+                            }
+                        } catch (e: TypeCastException) {
+                            tools.makeToast(resources.getString(R.string.error))
+                        }
+                        catch (E: NullPointerException) {
+                            tools.makeToast(resources.getString(R.string.error))
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        tools.makeToast(resources.getString(R.string.error))
+                    }
+                })
     }
 
-    internal inner class Async : AsyncTask<String, Void, Boolean>() {
+    private fun loadMenuDataList(pos: Int) {
+        var menuList = ArrayList<MenuListItem>()
 
-        override fun doInBackground(vararg urls: String?): Boolean {
+        val foodRef = FirebaseDatabase.getInstance().reference.child(repo.TAG_FOOD).child(list[pos].name)
+        foodRef.addListenerForSingleValueEvent(
+                object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        try {
+                            val map = dataSnapshot.value as Map<String, Any>
 
-            loadDataList()
+                            for (entry in map.entries) {
+                                val singleEntry = entry.value as Map<String, Any>
+                                val item = MenuListItem(entry.key, singleEntry["price"] as Long,
+                                        singleEntry["description"] as String, singleEntry["image"] as String)
 
-            return true
-            }
+                                menuList.add(item)
+                            }
 
-        override fun onPreExecute() {
-            pBar.visibility = View.VISIBLE
-        }
+                            list = tools.sortMainList(list)
+                            repo.setMenuList(menuList, list[pos].name)
+                            /* Если всё загружено */
+                            if (pos >= list.size - 1) {
+                                pBar.visibility = View.INVISIBLE
 
-        override fun onPostExecute(res: Boolean) {
-            pBar.visibility = View.INVISIBLE
-            ContentView.visibility = View.VISIBLE
-        }
+                                supportFragmentManager.beginTransaction()
+                                        .add(R.id.content_frame, mainFragment)
+                                        .commit()
+                            }
+
+                        } catch (e: TypeCastException) {
+                            tools.makeToast(resources.getString(R.string.error))
+                        }
+                        catch (E: NullPointerException) {
+                            tools.makeToast(resources.getString(R.string.error))
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        tools.makeToast(resources.getString(R.string.error))
+                    }
+                })
     }
 }

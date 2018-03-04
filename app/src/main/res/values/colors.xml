@@ -11,6 +11,18 @@
     <color name="colorSuccess">#27A844</color>
     <color name="colorError">#DC3546</color>
 
+    <color name="colorGradient1">#b42638</color>
+    <color name="colorGradient2">#e8aa4b</color>
+    <color name="colorGradient3">#c57789</color>
+    <color name="colorGradient4">#5d4a9b</color>
+
+    <color name="colorGreenGradient1">#DCE35B</color>
+    <color name="colorGreenGradient2">#45B649</color>
+
+    <color name="black_33">#33000000</color>
+    <color name="black_61">#61000000</color>
+    <color name="black_8a">#8a000000</color>
+
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTransparent">@android:color/transparent</color>

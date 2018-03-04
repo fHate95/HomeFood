@@ -5,17 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE">
+    android:background="@drawable/background_texture">
 
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/toolbar_dropshadow"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="4dp"-->
+        <!--android:background="@drawable/toolbar_dropshadow"/>-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -39,13 +39,18 @@
                 <TextView
                     android:id="@+id/tvEmptyCart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginRight="60dp"
                     android:text="@string/cart_empty"
                     android:textSize="18sp"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/colorSecondaryText"
+                    android:textColor="@color/colorAccent"
                     android:layout_centerInParent="true"
                     android:textAlignment="center"
+                    android:background="@drawable/border_rounded"
                     android:visibility="invisible"/>
 
             </FrameLayout>
@@ -55,7 +60,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:orientation="horizontal"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_rounded">
 
                 <TextView
                     android:id="@+id/tvCount"
@@ -64,7 +73,8 @@
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:layout_marginLeft="20dp"
-                    android:textColor="@color/colorPrimaryText"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
                     tools:text="n товар(ов) на сумму"/>
 
                 <TextView
@@ -73,8 +83,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical|end"
+                    android:textStyle="bold"
                     android:layout_marginRight="20dp"
-                    android:textColor="@color/colorPrimaryText"
+                    android:textColor="@color/colorAccent"
                     tools:text="***₽"/>
 
             </LinearLayout>
@@ -86,8 +97,10 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/colorWhite"
                 android:visibility="invisible"
+                android:background="@drawable/border_rounded"
                 android:text="@string/next"/>
         </LinearLayout>
 

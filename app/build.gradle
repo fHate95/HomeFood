@@ -40,7 +40,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'br.com.simplepass:loading-button-android:1.12.1'
     compile 'ru.egslava:MaskedEditText:1.0.5'
-    compile "com.daimajia.swipelayout:library:1.2.0@aar"
     compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 
     compile 'com.google.firebase:firebase-database:10.0.1'

@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.fhate.homefood.R
 import com.fhate.homefood.model.CartItem
+import com.fhate.homefood.model.MainItem
 import com.fhate.homefood.model.MenuListItem
 
 /* Класс для хранения данных */
@@ -21,6 +22,7 @@ class Repository(private val context: Context) {
     val TAG_FOOD = "food"
     val TAG_USERS = "users"
     val TAG_MENU = "menu"
+    val TAG_FOOD_TYPE = "food_type"
     val TAG_DISH = "dish"
     val TAG_PRICE = "price"
     val TAG_NAME = "name"
@@ -128,6 +130,37 @@ class Repository(private val context: Context) {
         return list
     }
 
+    fun setTypeList(list: ArrayList<MainItem>) {
+        val editor = prefs.edit()
+        val json = Gson().toJson(list)
+
+        editor.putString(TAG_FOOD_TYPE, json)
+        editor.commit()
+    }
+
+    /* Получим список типов меню */
+    fun getTypeList() : ArrayList<MainItem> {
+        var list = ArrayList<MainItem>()
+        try {
+
+            val json = prefs.getString(TAG_FOOD_TYPE, null)
+
+            if (json!!.isEmpty())
+                return list
+            else {
+                val type = object : TypeToken<ArrayList<MainItem>>() {
+
+                }.type
+                list = Gson().fromJson(json, type)
+            }
+            return list
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+        }
+
+        return list
+    }
+
     fun setMenuList(list: ArrayList<MenuListItem>, tag: String) {
         val editor = prefs.edit()
         val json = Gson().toJson(list)
@@ -136,7 +169,7 @@ class Repository(private val context: Context) {
         editor.commit()
     }
 
-    /* Сохраним список товаров в корзине */
+    /* Получим список товаров в корзине */
     fun getMenuList(tag: String) : ArrayList<MenuListItem> {
         var list = ArrayList<MenuListItem>()
         try {

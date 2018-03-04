@@ -3,102 +3,131 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="144dp">
+    android:layout_height="162dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginTop="10dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="140dp">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/border_rounded">
 
-        <FrameLayout
-            android:layout_width="0dp"
+        <ImageView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:scaleType="fitXY" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivImage"
-                android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvCartLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Уже в корзине."
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorPrimary"
+            android:visibility="invisible"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="140dp">
+
+            <FrameLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/photo_soup" />
-
-            <ProgressBar
-                android:id="@+id/pBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:paddingLeft="2dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
+                android:layout_weight="0.3"
+                android:paddingLeft="5dp"
                 android:paddingTop="5dp"
-                tools:text="name"
-                android:textSize="16sp"
-                android:textColor="@color/colorPrimaryText"
-                android:textStyle="bold"
-                android:layout_gravity="start"
-                android:maxLines="3"/>
+                android:paddingBottom="5dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ico_error_loading"
+                    android:scaleType="centerCrop" />
+
+                <ProgressBar
+                    android:id="@+id/pBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"/>
+
+            </FrameLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/buttonAdd"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/plus" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:paddingLeft="2dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvPrice"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    tools:text="120₽"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorSecondaryText"
-                    android:gravity="center"/>
+                    android:id="@+id/tvName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    tools:text="name"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    android:layout_gravity="start"
+                    android:maxLines="3"/>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="25dp"
+                    android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/buttonOverview"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/chevron"
-                    android:layout_gravity="center"
-                    android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    android:layout_marginRight="20dp"
-                    android:tint="@color/colorDivider"/>
+                    <Button
+                        android:id="@+id/buttonAdd"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/plus" />
+
+                    <TextView
+                        android:id="@+id/tvPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        tools:text="120₽"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorDivider"
+                        android:gravity="center"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"/>
+
+                    <ImageButton
+                        android:id="@+id/buttonOverview"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/chevron"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:background="@android:color/transparent"
+                        android:layout_marginRight="20dp"
+                        android:tint="@color/colorDivider"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/shadow_top_to_bot"/>
+    </FrameLayout>
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="4dp"-->
+        <!--android:background="@drawable/shadow_top_to_bot"/>-->
 
 </LinearLayout>

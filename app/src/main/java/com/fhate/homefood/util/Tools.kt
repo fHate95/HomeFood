@@ -23,6 +23,14 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import com.fhate.homefood.ui.activity.CartActivity
 import com.fhate.homefood.ui.activity.OrderActivity
+import com.squareup.picasso.Picasso.LoadedFrom
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.support.v4.content.ContextCompat
+import com.fhate.homefood.model.MainItem
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
+import java.util.*
 
 
 /* Класс, выполняющий роль разлчиных инструментов */
@@ -43,6 +51,8 @@ class Tools(val context: Context) {
             by lazy(LazyThreadSafetyMode.NONE) { AnimationUtils.loadAnimation(context, R.anim.fade_out) }
     val fadeInAnim: Animation
             by lazy(LazyThreadSafetyMode.NONE) { AnimationUtils.loadAnimation(context, R.anim.fade_in) }
+    val clickAnim: Animation
+            by lazy(LazyThreadSafetyMode.NONE) { AnimationUtils.loadAnimation(context, R.anim.click_animation) }
 
     /* Устанавливаем бэйдж для иконки корзины с кол-вом добавленных в неё товаров */
     fun setCartBadgeCount(icon: LayerDrawable, count: String) {
@@ -174,7 +184,7 @@ class Tools(val context: Context) {
         repo.setCartList(cartList)
     }
 
-    private fun isCartContains(item: MenuListItem, list: ArrayList<CartItem>) : Boolean {
+    fun isCartContains(item: MenuListItem, list: ArrayList<CartItem>) : Boolean {
         var res = false
         for (i in 0 until list.size) {
             if (list[i].name == item.name) {
@@ -196,5 +206,41 @@ class Tools(val context: Context) {
         }
 
         return pos
+    }
+
+    fun loadDrawable(url: String) : Drawable? {
+        var drawable: Drawable? = ContextCompat.getDrawable(context, R.drawable.ico_error_loading)
+
+        Picasso.with(context).load(url).into(object : Target {
+
+            override fun onPrepareLoad(arg0: Drawable?) {
+
+            }
+
+            override fun onBitmapLoaded(bitmap: Bitmap, arg1: LoadedFrom) {
+                drawable = BitmapDrawable(context.resources, bitmap)
+            }
+
+            override fun onBitmapFailed(arg0: Drawable?) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.ico_error_loading)
+            }
+        })
+
+        return drawable
+    }
+
+    fun sortMainList(list: ArrayList<MainItem>) : ArrayList<MainItem> {
+        for (i in 0 until list.size) {
+            when (list[i].name) {
+                "Супы" -> Collections.swap(list, 0, i)
+                "Горячее" -> Collections.swap(list, 1, i)
+                "Салаты" -> Collections.swap(list, 2, i)
+                "Выпечка" -> Collections.swap(list, 3, i)
+                "Торты" -> Collections.swap(list, 4, i)
+                "Десерты" -> Collections.swap(list, 5, i)
+                "Безглютеновые блюда" -> Collections.swap(list, 6, i)
+            }
+        }
+        return list
     }
 }

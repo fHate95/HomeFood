@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="144dp">
+    android:layout_height="142dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/border_rounded">
 
     <com.chauthai.swipereveallayout.SwipeRevealLayout
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="match_parent"
         app:mode="same_level"
         app:dragEdge="right">
 
@@ -24,23 +28,17 @@
                 <ImageView
                     android:id="@+id/buttonDelete"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="match_parent"
                     android:src="@drawable/ico_del"
                     android:padding="30dp"
-                    android:background="@color/colorError"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:background="@drawable/shadow_top_to_bot"
-                    android:layout_gravity="bottom"/>
+                    android:background="@drawable/border_rounded_del"/>
 
             </LinearLayout>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,7 +50,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3"
-                    android:src="@drawable/ico_test_pizza"
+                    android:src="@drawable/ico_error_loading"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"/>
@@ -72,7 +70,7 @@
                         android:paddingTop="5dp"
                         tools:text="name"
                         android:textSize="16sp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="@color/colorAccent"
                         android:textStyle="bold"
                         android:layout_gravity="start"
                         android:maxLines="3"/>
@@ -97,7 +95,7 @@
                             android:layout_weight="0.3"
                             tools:text="@string/one"
                             android:textSize="18sp"
-                            android:textColor="@color/colorSecondaryText"
+                            android:textColor="@color/colorDivider"
                             android:gravity="center"/>
 
                         <Button
@@ -113,7 +111,7 @@
                             android:layout_weight="0.7"
                             tools:text="120₽"
                             android:textSize="18sp"
-                            android:textColor="@color/colorSecondaryText"
+                            android:textColor="@color/colorPrimary"
                             android:gravity="center"/>
 
                     </LinearLayout>

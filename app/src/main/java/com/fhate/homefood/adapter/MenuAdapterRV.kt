@@ -1,6 +1,8 @@
 package com.fhate.homefood.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,11 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.fhate.homefood.R
 import com.fhate.homefood.model.MenuListItem
+import com.fhate.homefood.util.Repository
+import com.fhate.homefood.util.Tools
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.rv_menu_item.view.*
 
 internal class MenuAdapterRV(val context: Context, private val items: ArrayList<MenuListItem>, listener: AdapterClickListener):
         RecyclerView.Adapter<MenuAdapterRV.ViewHolder>() {
+
+    val tools = Tools(context)
+    val repo = Repository(context)
 
     val onClickListener: AdapterClickListener = listener
 
@@ -54,20 +62,38 @@ internal class MenuAdapterRV(val context: Context, private val items: ArrayList<
         }
 
         fun bindItems(item: MenuListItem, position: Int) {
-            //TODO: set image
             itemView.tvName.text = item.name
             itemView.tvPrice.text = item.price.toString() + context.resources.getString(R.string.ruble_sign)
+            if (tools.isCartContains(item, repo.getCartList())) itemView.tvCartLabel.visibility = View.VISIBLE
+            else itemView.tvCartLabel.visibility = View.INVISIBLE
 
             Picasso.with(context)
                     .load(item.imageUrl)
-                    .placeholder(R.drawable.ico_error_loading)
+                    //.placeholder(R.drawable.logo)
                     .resize(200, 150)
                     .error(R.drawable.ico_error_loading)
                     .into(itemView.ivImage)
 
-            itemView.pBar.visibility = View.INVISIBLE
+//            Picasso.with(context).load(item.imageUrl).into(object : Target {
+//
+//                override fun onPrepareLoad(arg0: Drawable?) {
+//                    itemView.pBar.visibility = View.VISIBLE
+//                }
+//
+//                override fun onBitmapLoaded(bitmap: Bitmap, arg1: Picasso.LoadedFrom) {
+//                    itemView.ivImage.setImageBitmap(bitmap)
+//                    itemView.pBar.visibility = View.INVISIBLE
+//                    itemView.ivImage.startAnimation(tools.fadeInAnim)
+//                }
+//
+//                override fun onBitmapFailed(arg0: Drawable?) {
+//                    itemView.ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ico_done))
+//                    itemView.pBar.visibility = View.INVISIBLE
+//                    itemView.ivImage.startAnimation(tools.fadeInAnim)
+//                }
+//            })
 
-            //itemView.ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ico_test_pizza))
+            itemView.pBar.visibility = View.INVISIBLE
         }
     }
 }

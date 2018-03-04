@@ -5,8 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import com.fhate.homefood.R
 import com.fhate.homefood.adapter.CartAdapterRV
@@ -17,9 +15,7 @@ import com.fhate.homefood.util.Tools
 import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
-import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
-import android.view.ViewAnimationUtils
 import android.animation.Animator
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
@@ -34,10 +30,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
+import android.graphics.drawable.GradientDrawable
 import android.os.Handler
 import android.support.annotation.Dimension
 import android.support.v4.content.ContextCompat
 import android.transition.TransitionManager
+import android.view.*
 import android.widget.Toast
 import com.creativityapps.gmailbackgroundlibrary.BackgroundMail
 
@@ -72,7 +70,12 @@ class CartActivity: AppCompatActivity() {
         toolbar.title = ""
         toolbar.tvTitle.text = resources.getString(R.string.cart)
 
-        animateActivity(savedInstanceState)
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(ContextCompat.getColor(this, R.color.colorGreenGradient1),
+                        ContextCompat.getColor(this, R.color.colorGreenGradient2)))
+
+        toolbar.background = gradientDrawable
 
         cartList = repo.getCartList()
         updateInfo()
@@ -87,8 +90,9 @@ class CartActivity: AppCompatActivity() {
         }
 
         buttonGoToOrder.setOnClickListener {
+            buttonGoToOrder.startAnimation(tools.clickAnim)
             val intent = Intent(this, OrderActivity::class.java)
-            overridePendingTransition(R.anim.left_out, R.anim.right_in)
+            //overridePendingTransition(R.anim.left_out, R.anim.right_in)
             startActivity(intent)
         }
     }
@@ -98,12 +102,12 @@ class CartActivity: AppCompatActivity() {
 
         if (repo.orderDone) {
             this.finish()
+            repo.orderDone = false
         }
     }
 
     override fun onBackPressed() {
-        //super.onBackPressed()
-        hideActivity()
+        super.onBackPressed()
     }
 
     private fun updateInfo() {
@@ -176,64 +180,5 @@ class CartActivity: AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun animateActivity(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                intent.hasExtra(repo.EXTRA_CIRCULAR_REVEAL_X) &&
-                intent.hasExtra(repo.EXTRA_CIRCULAR_REVEAL_Y)) {
-            /* TODO */
-            rootLayout.visibility = View.INVISIBLE
-
-            revealX = intent.getIntExtra(repo.EXTRA_CIRCULAR_REVEAL_X, 0)
-            revealY = intent.getIntExtra(repo.EXTRA_CIRCULAR_REVEAL_Y, 0)
-
-
-            val viewTreeObserver = rootLayout.viewTreeObserver
-            if (viewTreeObserver.isAlive) {
-                viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        showActivity(revealX, revealY)
-                        rootLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    }
-                })
-            }
-        } else {
-            rootLayout.visibility = View.VISIBLE
-        }
-    }
-
-    private fun showActivity(x: Int, y: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val finalRadius = (Math.max(rootLayout.width, rootLayout.height) * 1.1f)
-            val circularReveal = ViewAnimationUtils.createCircularReveal(rootLayout, x, y, 0f, finalRadius)
-
-            circularReveal.duration = 400
-            circularReveal.interpolator = AccelerateInterpolator()
-
-            rootLayout.visibility = View.VISIBLE
-            circularReveal.start()
-        } else {
-            finish()
-        }
-    }
-
-    private fun hideActivity() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            finish()
-        } else {
-            val finalRadius = (Math.max(rootLayout.width, rootLayout.height) * 1.1f)
-            val circularReveal = ViewAnimationUtils.createCircularReveal(
-                    rootLayout, revealX, revealY, finalRadius, 0f)
-
-            circularReveal.duration = 400
-            circularReveal.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    rootLayout.visibility = View.INVISIBLE
-                    finish()
-                }
-            })
-            circularReveal.start()
-        }
     }
 }

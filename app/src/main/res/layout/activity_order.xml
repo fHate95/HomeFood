@@ -6,17 +6,17 @@
     xmlns:mask="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE">
+    android:background="@drawable/background_food">
 
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/toolbar_dropshadow"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="4dp"-->
+        <!--android:background="@drawable/toolbar_dropshadow"/>-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,9 +34,11 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/et_name"
-                android:drawableLeft="@drawable/ic_user"
+                android:background="@drawable/border_rounded"
                 android:drawableTint="@color/colorAccent"
+                android:drawableLeft="@mipmap/ico_user"
+                android:textColorHint="@color/colorDivider"
+                android:textColor="@color/colorDivider"
                 android:drawablePadding="15dp"
                 android:hint="@string/name"
                 android:inputType="textCapWords"
@@ -49,9 +51,11 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/et_name"
-                android:drawableLeft="@drawable/ic_location"
+                android:background="@drawable/border_rounded"
+                android:textColorHint="@color/colorDivider"
                 android:drawableTint="@color/colorAccent"
+                android:drawableLeft="@mipmap/ico_location"
+                android:textColor="@color/colorDivider"
                 android:drawablePadding="15dp"
                 android:hint="@string/address"
                 android:padding="16dp" />
@@ -69,10 +73,12 @@
                 mask:allowed_chars="1234567890"
                 mask:mask="+7(###)###-##-##"
                 android:hint="**********"
+                android:textColorHint="@color/colorDivider"
+                android:textColor="@color/colorDivider"
                 app:keep_hint="true"
-                android:background="@drawable/et_name"
-                android:drawableLeft="@drawable/ic_phone"
+                android:background="@drawable/border_rounded"
                 android:drawableTint="@color/colorAccent"
+                android:drawableLeft="@mipmap/ico_phone"
                 android:drawablePadding="15dp"
                 android:padding="16dp"/>
 
@@ -83,10 +89,11 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:layout_marginBottom="50dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:layout_gravity="center"
+                android:textColor="@color/colorWhite"
                 android:text="@string/order_v"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/border_rounded_button_order"
                 app:spinning_bar_color="@color/colorAccent"
                 app:spinning_bar_padding="3dp" />
 

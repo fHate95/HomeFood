@@ -3,13 +3,17 @@ package com.fhate.homefood.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ScrollView
 import com.fhate.homefood.R
@@ -67,6 +71,13 @@ class OverviewActivity : AppCompatActivity() {
         tvPrice.text = dishPrice.toString() + resources.getString(R.string.ruble_sign)
         tvDescription.text = dishDescription
 
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(ContextCompat.getColor(this, R.color.colorGreenGradient1),
+                        ContextCompat.getColor(this, R.color.colorGreenGradient2)))
+
+        toolbar.background = gradientDrawable
+
         Picasso.with(this)
                 .load(dishImageUrl)
                 .placeholder(R.drawable.ico_error_loading)
@@ -93,6 +104,7 @@ class OverviewActivity : AppCompatActivity() {
         }
 
         buttonAddToCart.setOnClickListener {
+            buttonAddToCart.startAnimation(tools.clickAnim)
             tools.addToCart(MenuListItem(dishTag, dishPrice, dishDescription, dishImageUrl), tvCount.text.toString().toInt())
             tools.setCartBadgeCount(icon, tools.getCartCount().toString())
             tools.makeToast(resources.getString(R.string.cart_added))

@@ -20,9 +20,12 @@ import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import android.R.array
 import android.content.pm.ActivityInfo
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.MenuItem
+import android.view.WindowManager
 import com.fhate.homefood.model.User
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -59,6 +62,8 @@ class OrderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order)
 
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -66,6 +71,13 @@ class OrderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         toolbar.title = ""
         toolbar.tvTitle.text = resources.getString(R.string.order_form)
+
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(ContextCompat.getColor(this, R.color.colorGreenGradient1),
+                        ContextCompat.getColor(this, R.color.colorGreenGradient2)))
+
+        toolbar.background = gradientDrawable
 
         database = FirebaseDatabase.getInstance()
         userReference = database.getReference(repo.TAG_USERS)
@@ -85,52 +97,56 @@ class OrderActivity : AppCompatActivity() {
         }
 
         buttonOrder.setOnClickListener { v ->
+            buttonOrder.startAnimation(tools.clickAnim)
             if (isFildsFilled()) {
-                user = User(etName.text.toString(), etAddress.text.toString(), etNumber.text.toString(), 1, tools.getCartPrice())
+                if (tools.isOnline()) {
+                    user = User(etName.text.toString(), etAddress.text.toString(), etNumber.text.toString(), 1, tools.getCartPrice())
 
-                userReference.child(user.number).child(repo.TAG_ORDER_COUNT).addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        try {
-                            val value = dataSnapshot.getValue(Long::class.java).toString()
-                            user.orderCount = value.toLong() + 1
-                        } catch (E: NullPointerException) {
+                    userReference.child(user.number).child(repo.TAG_ORDER_COUNT).addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            try {
+                                val value = dataSnapshot.getValue(Long::class.java).toString()
+                                user.orderCount = value.toLong() + 1
+                            } catch (E: NullPointerException) {
 
+                            } catch (e: TypeCastException) {
+
+                            }
                         }
-                        catch (e: TypeCastException) {
 
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.w("db", "Failed to read value.", error.toException())
                         }
-                    }
+                    })
 
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.w("db", "Failed to read value.", error.toException())
-                    }
-                })
+                    userReference.child(user.number).child(repo.TAG_TOTAL_PRICE).addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            try {
+                                val value = dataSnapshot.getValue(Long::class.java).toString()
+                                user.totalPrice = value.toLong() + user.totalPrice
+                            } catch (E: NullPointerException) {
 
-                userReference.child(user.number).child(repo.TAG_TOTAL_PRICE).addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        try {
-                            val value = dataSnapshot.getValue(Long::class.java).toString()
-                            user.totalPrice = value.toLong() + user.totalPrice
-                        } catch (E: NullPointerException) {
+                            } catch (e: TypeCastException) {
 
+                            }
                         }
-                        catch (e: TypeCastException) {
 
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.w("db", "Failed to read value.", error.toException())
                         }
-                    }
+                    })
 
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.w("db", "Failed to read value.", error.toException())
-                    }
-                })
-
-                tools.hideKeyBoard(v, this@OrderActivity)
-                buttonOrder.startAnimation()
-                setMailBody()
-                sendEmail()
-                saveAutoCompleteNameList(etName.text.toString())
-                saveAutoCompleteAddressList(etAddress.text.toString())
-                repo.setCartList(ArrayList<CartItem>())
+                    tools.hideKeyBoard(v, this@OrderActivity)
+                    buttonOrder.startAnimation()
+                    setMailBody()
+                    sendEmail()
+                    saveAutoCompleteNameList(etName.text.toString())
+                    saveAutoCompleteAddressList(etAddress.text.toString())
+                    repo.setCartList(ArrayList<CartItem>())
+                }
+                else {
+                    tools.makeToast(resources.getString(R.string.alert_connection_error))
+                }
             }
             else {
                 tools.makeToast(resources.getString(R.string.error_fields))
