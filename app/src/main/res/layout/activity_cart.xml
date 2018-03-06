@@ -47,7 +47,7 @@
                     android:text="@string/cart_empty"
                     android:textSize="18sp"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorWhite"
                     android:layout_centerInParent="true"
                     android:textAlignment="center"
                     android:background="@drawable/border_rounded"
@@ -73,7 +73,7 @@
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:layout_marginLeft="20dp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorWhite"
                     android:textStyle="bold"
                     tools:text="n товар(ов) на сумму"/>
 
@@ -85,7 +85,7 @@
                     android:gravity="center_vertical|end"
                     android:textStyle="bold"
                     android:layout_marginRight="20dp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorWhite"
                     tools:text="***₽"/>
 
             </LinearLayout>
@@ -98,7 +98,7 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorPrimary"
                 android:visibility="invisible"
                 android:background="@drawable/border_rounded"
                 android:text="@string/next"/>

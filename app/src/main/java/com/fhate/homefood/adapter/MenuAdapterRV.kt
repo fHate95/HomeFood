@@ -28,7 +28,7 @@ internal class MenuAdapterRV(val context: Context, private val items: ArrayList<
     interface AdapterClickListener {
         fun onButtonAddClick(position: Int)
         fun onButtonOverviewClick(position: Int)
-        //fun onItemClick(position: Int)
+        fun onItemClick(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -56,9 +56,9 @@ internal class MenuAdapterRV(val context: Context, private val items: ArrayList<
                 onClickListener.onButtonOverviewClick(adapterPosition)
             }
 
-//            itemView.setOnClickListener {
-//                onClickListener.onItemClick(adapterPosition)
-//            }
+            itemView.setOnClickListener {
+                onClickListener.onItemClick(adapterPosition)
+            }
         }
 
         fun bindItems(item: MenuListItem, position: Int) {

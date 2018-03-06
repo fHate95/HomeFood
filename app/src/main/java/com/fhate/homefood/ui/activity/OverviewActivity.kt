@@ -116,6 +116,9 @@ class OverviewActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         icon = menu.findItem(R.id.action_cart).icon as LayerDrawable
         tools.setCartBadgeCount(icon, tools.getCartCount().toString())
+
+        menu.findItem(R.id.action_about).isVisible = false
+
         return true
     }
 

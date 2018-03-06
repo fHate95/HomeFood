@@ -14,6 +14,11 @@
     <string name="cart_empty">Ваша корзина пуста.</string>
     <string name="cart_add">Добавить в корзину</string>
     <string name="cart_added">Добавлено в корзину</string>
+    <string name="about">О нас</string>
+    <string name="add_review">Оставить отзыв</string>
+    <string name="review">Отзыв</string>
+    <string name="send">Отправить</string>
+    <string name="review_done">Спасибо. Ваш отзыв отправлен.</string>
 
     <string name="total">Итого</string>
     <string name="to_pay">К оплате</string>

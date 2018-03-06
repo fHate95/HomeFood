@@ -98,7 +98,7 @@ class OrderActivity : AppCompatActivity() {
 
         buttonOrder.setOnClickListener { v ->
             buttonOrder.startAnimation(tools.clickAnim)
-            if (isFildsFilled()) {
+            if (isFieldsFilled()) {
                 if (tools.isOnline()) {
                     user = User(etName.text.toString(), etAddress.text.toString(), etNumber.text.toString(), 1, tools.getCartPrice())
 
@@ -159,7 +159,7 @@ class OrderActivity : AppCompatActivity() {
         buttonOrder.dispose()
     }
 
-    private fun isFildsFilled() : Boolean {
+    private fun isFieldsFilled() : Boolean {
         var res = true
         when {
             etName.text.isEmpty() -> res = false

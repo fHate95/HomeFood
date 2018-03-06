@@ -1,7 +1,6 @@
 package com.fhate.homefood.ui.fragment
 
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -17,10 +16,6 @@ import com.fhate.homefood.ui.activity.MainActivity
 import com.fhate.homefood.ui.activity.OverviewActivity
 import com.fhate.homefood.util.Repository
 import com.fhate.homefood.util.Tools
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_menu.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
@@ -74,6 +69,18 @@ class MenuFragment: Fragment() {
                     tools.setCartBadgeCount((activity as MainActivity).icon, tools.getCartCount().toString())
                     tools.makeToast(activity.resources.getString(R.string.cart_added))
                     adapter.notifyDataSetChanged()
+                }
+
+                override fun onItemClick(position: Int) {
+                    val bundle = Bundle()
+                    bundle.putString(repo.TAG_DISH, menuList[position].name)
+                    val intent = Intent(activity, OverviewActivity::class.java)
+                    intent.putExtra(repo.TAG_DISH, menuList[position].name)
+                    intent.putExtra(repo.TAG_PRICE, menuList[position].price)
+                    intent.putExtra(repo.TAG_DESCRIPTION, menuList[position].description)
+                    intent.putExtra(repo.TAG_IMAGE_URL, menuList[position].imageUrl)
+                    //activity.overridePendingTransition(R.anim.left_out, R.anim.right_in)
+                    activity.startActivity(intent)
                 }
 
                 override fun onButtonOverviewClick(position: Int) {

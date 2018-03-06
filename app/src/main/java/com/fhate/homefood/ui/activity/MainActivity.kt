@@ -1,5 +1,6 @@
 package com.fhate.homefood.ui.activity
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.support.v7.app.AppCompatActivity
@@ -29,10 +30,13 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
+import android.widget.ScrollView
 import com.fhate.homefood.model.MainItem
+import com.fhate.homefood.ui.fragment.ReviewFragment
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import kotlinx.android.synthetic.main.info_dialog_view.view.*
 
 
 /* Главная активность */
@@ -54,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     val mainFragment = MainFragment()
     val menuFragment = MenuFragment()
+    val reviewFragment = ReviewFragment()
 
     private lateinit var database: FirebaseDatabase
     private lateinit var valueReference: DatabaseReference
@@ -111,6 +116,13 @@ class MainActivity : AppCompatActivity() {
                         .replace(R.id.content_frame, mainFragment)
                         .commit()
             }
+            reviewFragment.isVisible -> {
+                supportFragmentManager.beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                        .replace(R.id.content_frame, mainFragment)
+                        .commit()
+            }
             else -> finish()
         }
     }
@@ -120,6 +132,11 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         icon = menu.findItem(R.id.action_cart).icon as LayerDrawable
         tools.setCartBadgeCount(icon, tools.getCartCount().toString())
+
+        if (!mainFragment.isVisible) {
+            menu.findItem(R.id.action_about).isVisible = false
+        }
+
         return true
     }
 
@@ -133,6 +150,10 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, CartActivity::class.java)
                 //overridePendingTransition(R.anim.right_out, R.anim.left_in)
                 startActivity(intent)
+                true
+            }
+            R.id.action_about -> {
+                showAboutDialog()
                 true
             }
             android.R.id.home -> {
@@ -221,5 +242,13 @@ class MainActivity : AppCompatActivity() {
                         tools.makeToast(resources.getString(R.string.error))
                     }
                 })
+    }
+
+    private fun showAboutDialog() {
+        supportFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                .replace(R.id.content_frame, reviewFragment)
+                .commit()
     }
 }

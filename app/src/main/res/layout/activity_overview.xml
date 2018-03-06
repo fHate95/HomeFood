@@ -90,7 +90,7 @@
             android:layout_marginTop="20dp"
             tools:text="Description"
             android:textSize="16sp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorWhite"
             android:background="@drawable/border_rounded"/>
 
         <Button
@@ -102,7 +102,7 @@
             android:layout_marginBottom="40dp"
             android:background="@drawable/border_rounded"
             android:layout_marginTop="20dp"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorPrimary"
             android:text="@string/cart_add"/>
 
     </LinearLayout>
