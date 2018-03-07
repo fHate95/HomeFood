@@ -1,5 +1,4 @@
 package com.fhate.homefood.model
 
-import android.graphics.drawable.Drawable
-
+/* Дата класс-модель элемента меню */
 data class MenuListItem(val name: String, val price: Long, val description: String, val imageUrl: String)

@@ -39,17 +39,8 @@ import android.view.*
 import android.widget.Toast
 import com.creativityapps.gmailbackgroundlibrary.BackgroundMail
 
-
+/* Экран корзины */
 class CartActivity: AppCompatActivity() {
-
-    private var MAIL_USERNAME = "homefood.kirov@gmail.com"
-    private var MAIL_PASSWORD = "6t24paaYq"
-    private var MAIL_TO = "f.hate95@yandex.ru"
-    private var MAIL_SUBJECT = "Заказ №28"
-    private var MAIL_BODY = ""
-
-    private var revealX = 0
-    private var revealY = 0
 
     private val tools: Tools
             by lazy(LazyThreadSafetyMode.NONE) { Tools(this@CartActivity) }
@@ -62,14 +53,19 @@ class CartActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
 
+        /* Запретим смену ориентации экрана */
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        /* Настроим тулбар */
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true) //покажем кнопку back
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        /* Устанавливаем кастомный заголовок, описанный в toolbar.xml */
         toolbar.title = ""
         toolbar.tvTitle.text = resources.getString(R.string.cart)
 
+        /* Создаём градиент и устанавливаем его как фон для тулбара
+         * Таким образом можно создавать градиент не только из двух цветов, как в xml */
         val gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(ContextCompat.getColor(this, R.color.colorGreenGradient1),
@@ -77,8 +73,9 @@ class CartActivity: AppCompatActivity() {
 
         toolbar.background = gradientDrawable
 
+        /* Загружаем список элементов корзины из репозитория */
         cartList = repo.getCartList()
-        updateInfo()
+        updateInfo() //обновляем ифнормацию
 
         if (cartList.isNotEmpty()) {
             setRecyclerView()
@@ -92,7 +89,6 @@ class CartActivity: AppCompatActivity() {
         buttonGoToOrder.setOnClickListener {
             buttonGoToOrder.startAnimation(tools.clickAnim)
             val intent = Intent(this, OrderActivity::class.java)
-            //overridePendingTransition(R.anim.left_out, R.anim.right_in)
             startActivity(intent)
         }
     }
@@ -110,6 +106,8 @@ class CartActivity: AppCompatActivity() {
         super.onBackPressed()
     }
 
+    /* Обновим нформацию по товару в корзине
+    * запишем её в поля */
     private fun updateInfo() {
         when (tools.getCartCount() % 10) {
             1 -> tvCount.text = resources.getString(R.string.total) + " " + tools.getCartCount().toString() + " " +
@@ -123,6 +121,9 @@ class CartActivity: AppCompatActivity() {
 
     }
 
+    /* Настроим RecyclerView (список)
+     * установим описанный ранее адаптер, выберем ориентацию списка,
+     * обработаем клики по view элементам */
     private fun setRecyclerView() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
@@ -174,6 +175,7 @@ class CartActivity: AppCompatActivity() {
         }
     }
 
+    /* Клик по back button */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId === android.R.id.home) {
             onBackPressed()

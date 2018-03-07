@@ -42,17 +42,12 @@ import kotlinx.android.synthetic.main.info_dialog_view.view.*
 /* Главная активность */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var pagerAdapter: FragmentPagerAdapter
-
-    lateinit var icon : LayerDrawable
+    lateinit var icon : LayerDrawable //иконка корзины
 
     private val tools: Tools
             by lazy(LazyThreadSafetyMode.NONE) { Tools(this@MainActivity) }
     private val repo: Repository
             by lazy(LazyThreadSafetyMode.NONE) { Repository(this@MainActivity) }
-
-    private var revealX = 0
-    private var revealY = 0
 
     private var list = ArrayList<MainItem>()
 
@@ -60,10 +55,14 @@ class MainActivity : AppCompatActivity() {
     val menuFragment = MenuFragment()
     val reviewFragment = ReviewFragment()
 
+    /* объекты db */
     private lateinit var database: FirebaseDatabase
     private lateinit var valueReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        /* Устанавливаем главуню тему приложения до onCreate метода
+         * Это позволяет прописать отдельную тему для экрана загрузки (SplashScreen)
+          * Splash тема для активности установлена в манифест файле */
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -73,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         toolbar.title = ""
 
+        /* Объявляем FireBaseDataBase */
         database = FirebaseDatabase.getInstance()
         valueReference = database.getReference(repo.TAG_VALUES)
 
@@ -83,6 +83,8 @@ class MainActivity : AppCompatActivity() {
 
         toolbar.background = gradientDrawable
 
+        /* Если подключение присутствует - загрузим данные из базы
+         * в противном случае уведомим пользователя об ошибке соединения */
         if (tools.isOnline()) {
             loadDataList()
         }
@@ -92,6 +94,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /* onResume вызывается каждый раз, когда активность становится видимой,
+     * поэтому обновляем счётчик бэйджа корзины здесь.
+      * Кол-во элементов в корзине полуаем через tools класс из репозитория */
     override fun onResume() {
         super.onResume()
         try {
@@ -105,6 +110,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /* Обработчик систмной кнопки "назад"
+     * Если мы во фрагменте меню, то возвращаемся в главный фрагмент,
+      * если мы в информации, то также возвращаемся в главный,
+      * если мы уже в главном приложении - убиваем активность и закрываем приложение */
     override fun onBackPressed() {
         //super.onBackPressed()
         when {
@@ -145,17 +154,19 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
 
         return when (id) {
+            /* Корзина */
             R.id.action_cart -> {
-                //presentCartActivity(rootLayout)
                 val intent = Intent(this, CartActivity::class.java)
                 //overridePendingTransition(R.anim.right_out, R.anim.left_in)
                 startActivity(intent)
                 true
             }
+            /* "О нас" */
             R.id.action_about -> {
                 showAboutDialog()
                 true
             }
+            /* back */
             android.R.id.home -> {
                 onBackPressed()
                 true
@@ -201,6 +212,9 @@ class MainActivity : AppCompatActivity() {
                 })
     }
 
+    /* Загрузим все данные меню до отображения view
+     * Чтобы не загружать их при переходах в разделы меню
+      * Единественное, что будет загружаться при заполнении списков меню - изображения (в адаптере) */
     private fun loadMenuDataList(pos: Int) {
         var menuList = ArrayList<MenuListItem>()
 
@@ -224,7 +238,7 @@ class MainActivity : AppCompatActivity() {
                             /* Если всё загружено */
                             if (pos >= list.size - 1) {
                                 pBar.visibility = View.INVISIBLE
-
+                                /* Показыаем фрагмент */
                                 supportFragmentManager.beginTransaction()
                                         .add(R.id.content_frame, mainFragment)
                                         .commit()
@@ -244,6 +258,7 @@ class MainActivity : AppCompatActivity() {
                 })
     }
 
+    /* Вызываем фрагмент "о нас" */
     private fun showAboutDialog() {
         supportFragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

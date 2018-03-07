@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
 import kotlin.collections.ArrayList
 
-//TODO: Setup toolbar to OrderActivity
+/* Активность - заказ */
 class OrderActivity : AppCompatActivity() {
 
     private var mailUsername = "homefood.kirov@gmail.com"
@@ -62,6 +62,7 @@ class OrderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order)
 
+        /* Запретим клавиатуре смещать View элементы */
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -86,8 +87,11 @@ class OrderActivity : AppCompatActivity() {
         getGMailAccountData()
         getResponseNumber()
 
+        /* Установим TextWatcher для ввода номера (шаблон) */
         etNumber.addTextChangedListener(PhoneNumberFormattingTextWatcher())
 
+        /* Настройка AutoCompleteTextView
+         * Разворачивающееся меню полей, запоминающее ввёденные ранее данные */
         setAutoComplete()
         etName.setOnClickListener {
             etName.showDropDown()
@@ -96,10 +100,12 @@ class OrderActivity : AppCompatActivity() {
             etAddress.showDropDown()
         }
 
+        /* Клик по кнопке "Заказать" */
         buttonOrder.setOnClickListener { v ->
             buttonOrder.startAnimation(tools.clickAnim)
-            if (isFieldsFilled()) {
-                if (tools.isOnline()) {
+            if (isFieldsFilled()) { //Если все поля заполнены
+                if (tools.isOnline()) { //Если подключение предоставлено
+                    /* Получаем из базы все необходимые данные для отправки письма и отправляем его */
                     user = User(etName.text.toString(), etAddress.text.toString(), etNumber.text.toString(), 1, tools.getCartPrice())
 
                     userReference.child(user.number).child(repo.TAG_ORDER_COUNT).addValueEventListener(object : ValueEventListener {
@@ -154,11 +160,13 @@ class OrderActivity : AppCompatActivity() {
         }
     }
 
+    /* Чтобы предотвратить утечку памяти - освобождаем память, занятую использования анимированной кнопки */
     override fun onDestroy() {
         super.onDestroy()
         buttonOrder.dispose()
     }
 
+    /* Проверяем все ли поля заполнены */
     private fun isFieldsFilled() : Boolean {
         var res = true
         when {
@@ -170,6 +178,7 @@ class OrderActivity : AppCompatActivity() {
         return res
     }
 
+    /* Форируем сообщение */
     private fun setMailBody() {
         cartList = repo.getCartList()
         var allPrice: Long = 0
@@ -188,6 +197,7 @@ class OrderActivity : AppCompatActivity() {
         mailBody += resources.getString(R.string.to_pay) + ": " + allPrice + resources.getString(R.string.ruble_sign)
     }
 
+    /* Получаем данные доступа к mail аккаунту */
     private fun getGMailAccountData() {
         valueReference.child(repo.TAG_MAIL_USERNAME).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -262,6 +272,7 @@ class OrderActivity : AppCompatActivity() {
         })
     }
 
+    /* Получаем номер из бд */
     private fun getResponseNumber() {
         valueReference.child(repo.TAG_RESPONSE_NUMBER).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -282,6 +293,7 @@ class OrderActivity : AppCompatActivity() {
         })
     }
 
+    /* Отправляем email  */
     private fun sendEmail() {
         while (mailUsername == "" && mailPassword == "" && mailTo == "") {
 
@@ -319,6 +331,7 @@ class OrderActivity : AppCompatActivity() {
                 .send()
     }
 
+    /* Отправляем в бд данные пользователя */
     private fun saveUserData() {
         userReference.child(user.number).child(repo.TAG_NAME).setValue(user.name)
         userReference.child(user.number).child(repo.TAG_ADDRESS).setValue(user.address)
@@ -327,6 +340,7 @@ class OrderActivity : AppCompatActivity() {
         valueReference.child(repo.TAG_ORDER_NUMBER).setValue(orderNumber)
     }
 
+    /* Настраиваем AutoCompleteTextView */
     private fun setAutoComplete() {
         autoCompleteNameList = repo.getAutoCompleteList(repo.TAG_AUTOCOMPLETE_NAME)
         autoCompleteAddressList = repo.getAutoCompleteList(repo.TAG_AUTOCOMPLETE_ADDRESS)
@@ -334,6 +348,7 @@ class OrderActivity : AppCompatActivity() {
         etAddress.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, autoCompleteAddressList))
     }
 
+    /* Запоминаем данные введенные в поля для AutoCompleteTextView (имя) */
     private fun saveAutoCompleteNameList(item: String) {
         if (!autoCompleteNameList.contains(item)) {
             autoCompleteNameList.add(item)
@@ -341,6 +356,7 @@ class OrderActivity : AppCompatActivity() {
         }
     }
 
+    /* Запоминаем данные введенные в поля для AutoCompleteTextView (адрес) */
     private fun saveAutoCompleteAddressList(item: String) {
         if (!autoCompleteAddressList.contains(item)) {
             autoCompleteAddressList.add(item)

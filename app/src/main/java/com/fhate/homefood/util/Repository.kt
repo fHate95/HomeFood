@@ -13,6 +13,8 @@ import com.fhate.homefood.model.MenuListItem
 /* Класс для хранения данных */
 class Repository(private val context: Context) {
 
+    /* Тэги */
+
     private val PREFS_FILENAME = "ru.fhate.pushups"
     private val REPO_CART_COUNT = "cart_count"
     private val REPO_CART_LIST = "cart_list"
@@ -48,6 +50,7 @@ class Repository(private val context: Context) {
     val TAG_AUTOCOMPLETE_NAME = "autocomplete_name"
     val TAG_AUTOCOMPLETE_ADDRESS = "autocomplete_address"
 
+    /* SharedPreference позволяет хранить данные в пямяти устройства */
     private val prefs = context.getSharedPreferences(PREFS_FILENAME, 0)
 
     /* Кол-во товаров в корзине */
@@ -65,6 +68,7 @@ class Repository(private val context: Context) {
         prefs.edit().putString(REPO_LAST_MENU, value).apply()
     }
 
+    /* Флаг отправки заказа (Используется для показа нужного view после отправки) */
     var orderDone: Boolean
         get() = prefs.getBoolean(REPO_ORDER_TOGGLE, false)
         set(value) {
@@ -103,6 +107,7 @@ class Repository(private val context: Context) {
         return list
     }
 
+    /* Устанавливаем данные для AutoCompleteTextView */
     fun setAutoCompleteList(list: ArrayList<String>, tag: String) {
         val editor = prefs.edit()
         val json = Gson().toJson(list)
@@ -111,6 +116,7 @@ class Repository(private val context: Context) {
         editor.commit()
     }
 
+    /* Получаем данные AutoCompleteTextView */
     fun getAutoCompleteList(tag: String) : ArrayList<String> {
         var list = ArrayList<String>()
         try {
@@ -133,6 +139,7 @@ class Repository(private val context: Context) {
         return list
     }
 
+    /* Сохраняем список типов меню */
     fun setTypeList(list: ArrayList<MainItem>) {
         val editor = prefs.edit()
         val json = Gson().toJson(list)
@@ -164,6 +171,7 @@ class Repository(private val context: Context) {
         return list
     }
 
+    /* Сохраняем список меню */
     fun setMenuList(list: ArrayList<MenuListItem>, tag: String) {
         val editor = prefs.edit()
         val json = Gson().toJson(list)
@@ -172,7 +180,7 @@ class Repository(private val context: Context) {
         editor.commit()
     }
 
-    /* Получим список товаров в корзине */
+    /* Получим список меню */
     fun getMenuList(tag: String) : ArrayList<MenuListItem> {
         var list = ArrayList<MenuListItem>()
         try {

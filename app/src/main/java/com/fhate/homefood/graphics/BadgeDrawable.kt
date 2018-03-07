@@ -78,7 +78,7 @@ class BadgeDrawable(context: Context): Drawable() {
             canvas.drawText(count, centerX, textY, textPaint)
     }
 
-    /* Sets the count (i.e notifications) to display. */
+    /* Установка кол-ва, выводит его на иконку */
     fun setCount(count: String) {
         this.count = count
 

@@ -17,7 +17,7 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_review.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-
+/* Фрагмент "О нас" + отправка отзыва */
 class ReviewFragment : Fragment() {
 
     private val tools: Tools
@@ -58,6 +58,7 @@ class ReviewFragment : Fragment() {
         autoCompleteNameList = repo.getAutoCompleteList(repo.TAG_AUTOCOMPLETE_NAME)
         etName.setAdapter(ArrayAdapter(activity, android.R.layout.simple_dropdown_item_1line, autoCompleteNameList))
 
+        /* Получаем данные "о нас" */
         valueReference.child(repo.TAG_ABOUT).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 try {
@@ -77,6 +78,8 @@ class ReviewFragment : Fragment() {
             }
         })
 
+        /* Получаем кол-во отзывов для формирования тэга.
+        * Например при n = 3 (0,1,2) следующий тэг будет равен "3" */
         FirebaseDatabase.getInstance().reference.child(repo.TAG_REVIEWS).addListenerForSingleValueEvent(
                 object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -99,6 +102,8 @@ class ReviewFragment : Fragment() {
                     }
                 })
 
+        /* Обработчик клика по кнопке "Оставить отзыв"
+        * анимированно покажем view и скроем кнопку */
         buttonReview.setOnClickListener {
             llReview.startAnimation(tools.fadeInAnim)
             llReview.visibility = View.VISIBLE
@@ -107,18 +112,24 @@ class ReviewFragment : Fragment() {
             buttonReview.visibility = View.INVISIBLE
         }
 
+        /* Обработчик клика по полю "Имя"
+         * покажем drop menu */
         etName.setOnClickListener {
             etName.showDropDown()
         }
 
+        /* Обработчик клика по полю "Отзыв"
+         * скроллим вниз */
         etReview.setOnClickListener {
             reviewScrollView.fullScroll(ScrollView.FOCUS_DOWN)
         }
 
+        /* Обработчик клика по кнопке "отправить"
+         * отправляем данные в бд */
         buttonReviewDone.setOnClickListener {
             buttonReviewDone.startAnimation(tools.clickAnim)
 
-            if (isFieldsFilled()) {
+            if (isFieldsFilled()) { //если все поля заполнены
                 reviewReference.child(currentReviewTag).child(repo.TAG_NAME).setValue(etName.text.toString())
                 reviewReference.child(currentReviewTag).child(repo.TAG_REVIEW).setValue(etReview.text.toString())
                 saveAutoCompleteNameList(etName.text.toString())
@@ -133,6 +144,7 @@ class ReviewFragment : Fragment() {
         }
     }
 
+    /* Проверяем все ли поля заполнены */
     private fun isFieldsFilled() : Boolean {
         var res = true
         when {
@@ -143,6 +155,7 @@ class ReviewFragment : Fragment() {
         return res
     }
 
+    /* Сохраним AutoCompleteTV data */
     private fun saveAutoCompleteNameList(item: String) {
         if (!autoCompleteNameList.contains(item)) {
             autoCompleteNameList.add(item)

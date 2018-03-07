@@ -12,7 +12,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.squareup.picasso.Picasso
 
-
+/* Класс адаптер для списка корзины */
 internal class CartAdapterRV(val context: Context, private val items: ArrayList<CartItem>, listener: AdapterClickListener):
         RecyclerView.Adapter<CartAdapterRV.ViewHolder>() {
 
@@ -21,6 +21,7 @@ internal class CartAdapterRV(val context: Context, private val items: ArrayList<
     /* SwipeLayout stuff */
     private val binderHelper = ViewBinderHelper()
 
+    /* Интерфейс для обработки кликов по элементам */
     interface AdapterClickListener {
         fun onButtonIncreaseClick(position: Int)
         fun onButtonDecreaseClick(position: Int)
@@ -44,11 +45,12 @@ internal class CartAdapterRV(val context: Context, private val items: ArrayList<
         return items.size
     }
 
+    /* ViewHolder класс, хранящий вид элемента списка */
     internal inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val swipeLayout: SwipeRevealLayout = itemView.swipeLayout
 
-        /* Set click listeners for view items */
+        /* Установим листенеры кликов для определенных view элементов */
         init {
 
             itemView.buttonIncrease.setOnClickListener {
@@ -62,11 +64,13 @@ internal class CartAdapterRV(val context: Context, private val items: ArrayList<
             }
         }
 
+        /* Заполним view данными */
         fun bindItems(item: CartItem, position: Int) {
             itemView.tvName.text = item.name
             itemView.tvCount.text = item.count.toString()
             itemView.tvPrice.text = (item.price * item.count).toString() + context.resources.getString(R.string.ruble_sign)
 
+            /* Загрузка изображений */
             Picasso.with(context)
                     .load(item.imageUrl)
                     .placeholder(R.drawable.ico_error_loading)

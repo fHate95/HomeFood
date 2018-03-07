@@ -71,12 +71,14 @@ class Tools(val context: Context) {
         icon.setDrawableByLayerId(R.id.ic_badge, badge)
     }
 
+    /* Проверяем подключение */
     fun isOnline(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo
         return netInfo != null && netInfo.isConnectedOrConnecting
     }
 
+    /* Покажем диалог */
     fun showAlertDialog(title: String, message: String, icon: Int?) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
@@ -98,6 +100,7 @@ class Tools(val context: Context) {
         alert.show()
     }
 
+    /* Покажем диалог при успешном заказе */
     fun showOrderDoneAlert(title: String, message: String, icon: Int?, number: String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
@@ -132,25 +135,30 @@ class Tools(val context: Context) {
         alert.show()
     }
 
+    /* Покажем toast */
     fun makeToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
+    /* Скроем клавиатуру */
     fun hideKeyBoard(v: View, cont: Context) {
         val imm = cont.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
+    /* Скроем toolbar title */
     fun hideToolbarTitle(toolbar: TextView) {
         toolbar.startAnimation(leftOutAnim)
         toolbar.visibility = View.INVISIBLE
     }
 
+    /* Покажем toolbar title */
     fun showToolbarTitle(toolbar: TextView) {
         toolbar.startAnimation(leftInAnim)
         toolbar.visibility = View.VISIBLE
     }
 
+    /* Получим кол-во товаров в корзине */
     fun getCartCount() : Int {
         var cartList = repo.getCartList()
         var count = 0
@@ -162,6 +170,7 @@ class Tools(val context: Context) {
         return count
     }
 
+    /* Получим всю сумму заказа в корзине */
     fun getCartPrice() : Long {
         var cartList = repo.getCartList()
         var price: Long = 0
@@ -173,6 +182,7 @@ class Tools(val context: Context) {
         return price
     }
 
+    /* Добавим элемент в корзину */
     fun addToCart(item: MenuListItem, count: Int) {
         var cartList = repo.getCartList()
         if (isCartContains(item, cartList)) {
@@ -184,6 +194,7 @@ class Tools(val context: Context) {
         repo.setCartList(cartList)
     }
 
+    /* Содержит ли корзина определенный товар */
     fun isCartContains(item: MenuListItem, list: ArrayList<CartItem>) : Boolean {
         var res = false
         for (i in 0 until list.size) {
@@ -196,6 +207,7 @@ class Tools(val context: Context) {
         return res
     }
 
+    /* Получим позицию определенного элемента в корзине */
     private fun getCartItemPosition(item: MenuListItem, list: ArrayList<CartItem>) : Int {
         var pos = 0
         for (i in 0 until list.size) {
@@ -208,6 +220,7 @@ class Tools(val context: Context) {
         return pos
     }
 
+    /* Загрузим изображение */
     fun loadDrawable(url: String) : Drawable? {
         var drawable: Drawable? = ContextCompat.getDrawable(context, R.drawable.ico_error_loading)
 
@@ -229,6 +242,7 @@ class Tools(val context: Context) {
         return drawable
     }
 
+    /* Отсортируем главный список */
     fun sortMainList(list: ArrayList<MainItem>) : ArrayList<MainItem> {
         for (i in 0 until list.size) {
             when (list[i].name) {

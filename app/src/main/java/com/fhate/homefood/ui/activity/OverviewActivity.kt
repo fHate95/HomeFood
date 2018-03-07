@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_overview.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.view.*
 
-
+/* Активность подробного описания товара */
 class OverviewActivity : AppCompatActivity() {
 
     lateinit var icon : LayerDrawable
@@ -50,6 +50,7 @@ class OverviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
+        /* Получаем данные из intent */
         if (intent != null) {
             try {
                 dishTag = intent.getStringExtra(repo.TAG_DISH)
@@ -78,15 +79,17 @@ class OverviewActivity : AppCompatActivity() {
 
         toolbar.background = gradientDrawable
 
+        /* Загружаем изображение */
         Picasso.with(this)
                 .load(dishImageUrl)
                 .placeholder(R.drawable.ico_error_loading)
                 .error(R.drawable.ico_error_loading)
                 .into(ivImage)
 
+        /* Загружаем список корзины из репо */
         cartList = repo.getCartList()
 
-
+        /* Обрабатываем клик по кнопке "+" */
         buttonIncrease.setOnClickListener {
             var value = tvCount.text.toString().toInt()
             var price = tvPrice.text.toString().substring(0, tvPrice.text.length - 1).toLong()
@@ -94,6 +97,7 @@ class OverviewActivity : AppCompatActivity() {
             tvPrice.text = (price + dishPrice).toString() + resources.getString(R.string.ruble_sign)
         }
 
+        /* Обрабатываем клик по кнопке "-" */
         buttonDecrease.setOnClickListener {
             var value = tvCount.text.toString().toInt()
             var price = tvPrice.text.toString().substring(0, tvPrice.text.length - 1).toLong()
@@ -103,6 +107,7 @@ class OverviewActivity : AppCompatActivity() {
             }
         }
 
+        /* Обрабатываем клик по кнопке "Добавить в корзину" */
         buttonAddToCart.setOnClickListener {
             buttonAddToCart.startAnimation(tools.clickAnim)
             tools.addToCart(MenuListItem(dishTag, dishPrice, dishDescription, dishImageUrl), tvCount.text.toString().toInt())
@@ -138,17 +143,16 @@ class OverviewActivity : AppCompatActivity() {
         }
     }
 
-    /* Создадим намеренность анимиованного открытия активности-корзины */
+    /* Создадим намеренность анимиованного открытия активности-корзины
+    * disabled due to low API lvl includes */
     private fun presentCartActivity(view: ScrollView) {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "transition")
         val revealX = (view.x + view.width).toInt()
         val revealY = (0).toInt()
 
         val intent = Intent(this, CartActivity::class.java)
-        intent.putExtra(repo.EXTRA_CIRCULAR_REVEAL_X, revealX)
-        intent.putExtra(repo.EXTRA_CIRCULAR_REVEAL_Y, revealY)
 
-        ActivityCompat.startActivity(this, intent, options.toBundle())
+        ActivityCompat.startActivity(this, intent, null)
     }
 
 }

@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.rv_menu_item.view.*
 
+/* Класс адаптер для списка меню */
 internal class MenuAdapterRV(val context: Context, private val items: ArrayList<MenuListItem>, listener: AdapterClickListener):
         RecyclerView.Adapter<MenuAdapterRV.ViewHolder>() {
 

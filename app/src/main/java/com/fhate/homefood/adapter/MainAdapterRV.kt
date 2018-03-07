@@ -11,6 +11,7 @@ import com.fhate.homefood.model.MainItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.rv_food_types_item.view.*
 
+/* Класс адаптер для списка типов меню */
 internal class MainAdapterRV(private val items: ArrayList<MainItem>, listener: AdapterClickListener, val context: Context):
         RecyclerView.Adapter<MainAdapterRV.ViewHolder>() {
 
