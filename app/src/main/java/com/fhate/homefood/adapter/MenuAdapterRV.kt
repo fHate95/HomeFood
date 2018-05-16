@@ -75,25 +75,6 @@ internal class MenuAdapterRV(val context: Context, private val items: ArrayList<
                     .error(R.drawable.ico_error_loading)
                     .into(itemView.ivImage)
 
-//            Picasso.with(context).load(item.imageUrl).into(object : Target {
-//
-//                override fun onPrepareLoad(arg0: Drawable?) {
-//                    itemView.pBar.visibility = View.VISIBLE
-//                }
-//
-//                override fun onBitmapLoaded(bitmap: Bitmap, arg1: Picasso.LoadedFrom) {
-//                    itemView.ivImage.setImageBitmap(bitmap)
-//                    itemView.pBar.visibility = View.INVISIBLE
-//                    itemView.ivImage.startAnimation(tools.fadeInAnim)
-//                }
-//
-//                override fun onBitmapFailed(arg0: Drawable?) {
-//                    itemView.ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ico_done))
-//                    itemView.pBar.visibility = View.INVISIBLE
-//                    itemView.ivImage.startAnimation(tools.fadeInAnim)
-//                }
-//            })
-
             itemView.pBar.visibility = View.INVISIBLE
         }
     }
